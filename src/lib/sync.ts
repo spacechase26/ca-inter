@@ -6,7 +6,8 @@
  * feature works locally (localStorage only).
  */
 
-export const APPS_SCRIPT_URL: string = ""; // <-- paste your /exec URL here
+export const APPS_SCRIPT_URL: string =
+  "https://script.google.com/macros/s/AKfycbxW2hZK9_r7yRpuTKHFvzGJtSm4y0fbhDDQic33CYmHDWSfuVDCJoTCKnKsgu_Ig7V00Q/exec";
 
 const LS_PREFIX = "pdf:lastPage:";
 const POST_DEBOUNCE_MS = 1500;
