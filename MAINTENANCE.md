@@ -18,33 +18,119 @@ If you want the website to refresh immediately, click the **↻ Refresh** button
 
 ---
 
-## 2. Add a new PDF (study material or handwritten notes)
+## 2. Managing the PDF library
+
+The site reads its PDF list from a single source of truth: the **`11 · PDFs`** tab in your Google Sheet. Each row maps one PDF file (sitting in `public/pdfs/...`) to a Category, Paper, and optional Chapter#. The chapter detail page picks up everything that applies to that chapter; the `/library` page shows everything.
+
+### 2a. Folder convention
+
+Every PDF lives under `public/pdfs/<category-folder>/<file>.pdf`:
+
+```
+public/pdfs/
+├── icai/
+│   ├── study-material/p4-costing/ch01.pdf  …  p6b-sm/ch05.pdf
+│   ├── rtp/    p4-may2026.pdf, p5-jan2026.pdf, …
+│   └── qp/     p4-may2024.pdf, p4-sep2024.pdf, …
+├── mtp/        ← drop login-only ICAI Mock Test Papers here
+├── external/   ← paid coaching material, free YouTube channel notes
+├── scanners/   ← practice scanners (Vsmart, Aldine, etc.)
+├── notes/      ← your typed / handwritten summaries
+└── charts/     ← mind maps, formula sheets, one-pagers
+```
+
+Filenames: lowercase, hyphen-separated, two-digit chapter numbers (`ch02`, not `ch2`), no spaces. The bit before `.pdf` is the storage key for the cross-device resume — so renaming a PDF resets its remembered last-page (you can edit the hidden `ReadingState` tab to migrate).
+
+### 2b. Adding one PDF (the 3-step flow)
 
 ```sh
 cd /home/coder/ca-inter
 
-# 1. Drop the file into public/pdfs/
-#    Use lowercase, hyphen-separated names. Keep them short and meaningful.
-cp /path/to/your-file.pdf public/pdfs/material-cost.pdf
+# 1. Drop the file into the right subfolder
+cp ~/Downloads/my-summary.pdf public/pdfs/notes/p4-ch2-material-cost-summary.pdf
+```
 
-# 2. In the Google Sheet → Syllabus tab → find the chapter
-#    Add the bare path (no leading slash) to the "PDF URL" column.
-#    Example value: pdfs/material-cost.pdf
-#    (Don't include the domain or /ca-inter/ prefix — pdf.ts resolves it.)
+```text
+# 2. In the Google Sheet → `11 · PDFs` tab → append a row:
+Category=Notes  Paper=P4  Ch#=2
+Title=Material Cost — my one-page summary
+Path=notes/p4-ch2-material-cost-summary.pdf
+Pages=3  Notes=Hand-written
+```
 
-# 3. Commit and push
-git add public/pdfs/material-cost.pdf
-git commit -m "Add PDF: material cost"
+```sh
+# 3. Commit + push so Pages serves the new file
+git add public/pdfs/notes/p4-ch2-material-cost-summary.pdf
+git commit -m "Add P4 Ch2 summary note"
 git push
 ```
 
-Within 2 minutes the chapter page at `/syllabus/p4-ch2-material-cost` (or whichever chapter you linked it to) will render the PDF inline. The Refresh button on the syllabus page picks up the new `PDF URL` Sheet value.
+The site picks up the new row from your Sheet within 5–15 min (Google CSV cache). Click **↻ Refresh** in the nav to force it sooner. The PDF itself is live as soon as GitHub Pages re-deploys (~2 min after `git push`).
 
-### Naming gotcha
-The filename (minus `.pdf`) is the storage key for cross-device resume. If you rename a PDF, the saved last-page resets (because the key changes). To preserve reading position across a rename, also manually edit the `ReadingState` hidden tab in the Sheet — find the old key, change it to the new key.
+### 2c. Paper-wide vs chapter-specific
 
-### Linking the same PDF from multiple chapters
-Allowed. All chapters that reference `pdfs/foo.pdf` will share one saved reading position. Useful when one PDF covers multiple chapters.
+| Sheet row | Where it shows |
+|---|---|
+| `Paper=P4`, `Ch#=2` | Only on `/syllabus/p4-ch2-material-cost` |
+| `Paper=P4`, `Ch#=` (blank) | On EVERY P4 chapter page (e.g. ICAI module IPs, RTPs, QPs) |
+| `Paper=P6`, `Ch#=` (blank) | On all P6A AND P6B chapter pages (handles combined FM+SM RTPs/QPs) |
+| `Paper=` (blank), `Ch#=` (blank) | Reserved for cross-paper material (rare) |
+
+### 2d. Linking one PDF to multiple chapters
+
+Two ways:
+- **Same paper, multiple chapters** → add multiple rows, same Path, different Ch#.
+- **Truly paper-wide** → leave Ch# blank. Auto-shows on every chapter of that paper.
+
+All rows pointing at the same Path share the cross-device resume position (since the filename is the storage key).
+
+### 2e. Adding a brand-new category
+
+The chapter page groups by whatever Category string appears in the Sheet. To add a new one (e.g., `Cheat Sheets`):
+
+1. Type `Cheat Sheets` in the Category column of new rows.
+2. Optional: drop a matching `--cat-cheat-sheets` accent color into `src/components/PdfCard.astro` (or the card will fall back to neutral grey).
+
+### 2f. Pulling a NEW ICAI edition (when ICAI publishes one)
+
+When ICAI rolls a new edition (e.g. "Sep 2027 onwards"), three steps:
+
+```sh
+cd /home/coder/ca-inter
+
+# 1. Update the URL table — paste new URLs into scripts/icai_inventory.py
+#    Source pages: https://www.icai.org/post/sm-inter-p4-<attempt>  (etc.)
+#    Use AI to scrape: "List every resource.cdn.icai.org URL on <page>"
+
+# 2. Re-fetch (idempotent — only downloads what's missing or --force'd)
+python3 scripts/fetch-icai-pdfs.py
+# or:  python3 scripts/fetch-icai-pdfs.py --force --only P4
+
+# 3. Regenerate seed CSV + snapshot, re-import into Sheet
+python3 scripts/seed-pdfs-tab.py
+# Then in the Sheet: clear the data rows in `11 · PDFs`, File → Import → Append the new CSV
+
+git add scripts/ src/data/snapshots/pdfs.json public/pdfs/
+git commit -m "Refresh ICAI material for <attempt>"
+git push
+```
+
+### 2g. Retiring a PDF
+
+1. Delete the row from the Sheet's `11 · PDFs` tab.
+2. `rm public/pdfs/<path>` to reclaim repo space (optional but recommended).
+3. `git push`.
+
+### 2h. MTPs — manual upload (login required)
+
+ICAI hides Mock Test Papers behind a BoS Knowledge Portal login, so `fetch-icai-pdfs.py` can't grab them. To add MTPs:
+
+1. Log into https://boslive.icai.org with your ICAI student credentials.
+2. Navigate to *Mock Test Papers* → CA Intermediate → your attempt's series.
+3. Download each PDF for Papers 4, 5, 6.
+4. Drop into `public/pdfs/mtp/` (e.g. `p4-may2026-series1.pdf`, `p5-may2026-series2.pdf`).
+5. Add corresponding rows to the Sheet's `11 · PDFs` tab with Category=`MTP`.
+6. `git push`.
 
 ---
 

@@ -1,0 +1,126 @@
+---
+import Base from "../../layouts/Base.astro";
+import PdfCard from "../../components/PdfCard.astro";
+import { getSnapshot } from "../../lib/sheets";
+import { groupByCategory } from "../../lib/pdf";
+import type { PdfRecord } from "../../types/sheet";
+
+const snap = getSnapshot("pdfs");
+const pdfs = snap.rows.filter((r) => r["Path"]) as unknown as PdfRecord[];
+const groups = groupByCategory(pdfs);
+const total = pdfs.length;
+const papers = Array.from(new Set(pdfs.map((p) => p.Paper).filter(Boolean))) as string[];
+papers.sort();
+---
+<Base
+  eyebrow={`Library · ${total} PDFs`}
+  title="PDF library"
+  description="Every PDF the site can render — ICAI study material, RTPs, past papers, plus anything you upload. Filter by paper, click any card to open."
+>
+  <div class="filters" role="group" aria-label="Filter by paper">
+    <button class="filter filter--active" type="button" data-paper="">All papers</button>
+    {papers.map((p) => (
+      <button class="filter" type="button" data-paper={p}>{p}</button>
+    ))}
+  </div>
+
+  {groups.map((g) => (
+    <section class="lib-cat" data-category={g.category}>
+      <header class="lib-cat__head">
+        <h2 class="lib-cat__title">{g.category}</h2>
+        <span class="lib-cat__count" data-role="count">{g.items.length}</span>
+      </header>
+      <div class="lib-cat__grid">
+        {g.items.map((p) => (
+          <div class="lib-cat__cell" data-paper={p.Paper || ""}>
+            <PdfCard
+              title={p.Title}
+              path={p.Path}
+              category={g.category}
+              paper={p.Paper}
+              chapter={p["Ch#"]}
+              pages={p.Pages}
+              notes={p.Notes}
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <script type="module">
+    const filters = document.querySelectorAll('.filter');
+    filters.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const paper = btn.dataset.paper || '';
+        filters.forEach((b) => b.classList.toggle('filter--active', b === btn));
+        document.querySelectorAll('.lib-cat').forEach((section) => {
+          let shown = 0;
+          section.querySelectorAll('.lib-cat__cell').forEach((cell) => {
+            const cellPaper = cell.dataset.paper || '';
+            // A PDF marked P6 should show under P6A and P6B filters too
+            const match = !paper
+              || cellPaper === paper
+              || (cellPaper === 'P6' && (paper === 'P6A' || paper === 'P6B'))
+              || (cellPaper === '' /* paper-wide */);
+            cell.style.display = match ? '' : 'none';
+            if (match) shown++;
+          });
+          const countEl = section.querySelector('[data-role="count"]');
+          if (countEl) countEl.textContent = String(shown);
+          section.style.display = shown === 0 ? 'none' : '';
+        });
+      });
+    });
+  </script>
+</Base>
+
+<style>
+  .filters {
+    display: flex;
+    gap: var(--s-1);
+    flex-wrap: wrap;
+    margin-bottom: var(--s-6);
+  }
+  .filter {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-2);
+    background: transparent;
+    cursor: pointer;
+  }
+  .filter--active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  .lib-cat {
+    margin-bottom: var(--s-7);
+  }
+  .lib-cat__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+    margin-bottom: var(--s-3);
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--rule);
+  }
+  .lib-cat__title {
+    font-size: var(--t-h4);
+    font-weight: 500;
+    margin: 0;
+  }
+  .lib-cat__count {
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
+    color: var(--ink-mute);
+    margin-left: auto;
+  }
+  .lib-cat__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--s-3);
+  }
+</style>

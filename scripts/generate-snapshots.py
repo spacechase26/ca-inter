@@ -94,7 +94,9 @@ def extract_wellness(ws):
     return {"sections": sections}
 
 
-# Sheet name -> snapshot filename (kebab-case, no number prefix)
+# Sheet name -> snapshot filename (kebab-case, no number prefix).
+# Note: `11 · PDFs` snapshot is NOT generated here — it's owned by
+# scripts/seed-pdfs-tab.py, which builds it from scripts/icai_inventory.py.
 TAB_MAP = {
     "1 · Start Here": "start-here",
     "2 · Dashboard":  "dashboard",

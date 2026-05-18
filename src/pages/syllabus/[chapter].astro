@@ -1,10 +1,11 @@
 ---
 import Base from "../../layouts/Base.astro";
-import PdfViewer from "../../components/PdfViewer.astro";
+import PdfCard from "../../components/PdfCard.astro";
 import { getSnapshot } from "../../lib/sheets";
 import { chapterSlug } from "../../lib/slug";
 import { formatPretty } from "../../lib/today";
-import type { Chapter } from "../../types/sheet";
+import { pdfsForChapter, groupByCategory } from "../../lib/pdf";
+import type { Chapter, PdfRecord } from "../../types/sheet";
 
 export async function getStaticPaths() {
   const snap = getSnapshot("syllabus");
@@ -32,7 +33,10 @@ const prioLabel = chapter.Priority.replace(/^[^\w]+/, "").trim();
 const prioKey = chapter.Priority.includes("Must") ? "must" : chapter.Priority.includes("Important") ? "imp" : "low";
 const weightPct = Math.round(chapter.Weight * 100);
 
-const pdfPath = chapter["PDF URL"];
+// Pull all PDFs that apply to this chapter (paper-wide + chapter-specific + Paper-6 RTPs/QPs for P6A/P6B)
+const allPdfs = getSnapshot("pdfs").rows.filter((r) => r["Path"]) as unknown as PdfRecord[];
+const myPdfs = pdfsForChapter(chapter, allPdfs);
+const pdfGroups = groupByCategory(myPdfs);
 ---
 <Base
   eyebrow={paperLabel[chapter.Paper] ?? chapter.Paper}
@@ -46,46 +50,47 @@ const pdfPath = chapter["PDF URL"];
   </div>
 
   <section class="meta-grid">
-    <div class="meta-card">
-      <dt>Theory</dt><dd>{chapter.Theory}h</dd>
-    </div>
-    <div class="meta-card">
-      <dt>Practice</dt><dd>{chapter.Practice}h</dd>
-    </div>
-    <div class="meta-card">
-      <dt>Lecture</dt><dd>{chapter.Lecture}h</dd>
-    </div>
-    <div class="meta-card">
-      <dt>Total</dt><dd>{chapter["Total hrs"]}h</dd>
-    </div>
-    <div class="meta-card">
-      <dt>Weight</dt><dd>{weightPct}%</dd>
-    </div>
-    <div class="meta-card">
-      <dt>ICAI section</dt><dd>{chapter["ICAI Sec"]} <span class="meta-band">({chapter.Band})</span></dd>
-    </div>
-    {chapter.Start && (
-      <div class="meta-card">
-        <dt>Starts</dt><dd>{formatPretty(chapter.Start)}</dd>
-      </div>
-    )}
-    {chapter.End && (
-      <div class="meta-card">
-        <dt>Ends</dt><dd>{formatPretty(chapter.End)}</dd>
-      </div>
-    )}
+    <div class="meta-card"><dt>Theory</dt><dd>{chapter.Theory}h</dd></div>
+    <div class="meta-card"><dt>Practice</dt><dd>{chapter.Practice}h</dd></div>
+    <div class="meta-card"><dt>Lecture</dt><dd>{chapter.Lecture}h</dd></div>
+    <div class="meta-card"><dt>Total</dt><dd>{chapter["Total hrs"]}h</dd></div>
+    <div class="meta-card"><dt>Weight</dt><dd>{weightPct}%</dd></div>
+    <div class="meta-card"><dt>ICAI section</dt><dd>{chapter["ICAI Sec"]} <span class="meta-band">({chapter.Band})</span></dd></div>
+    {chapter.Start && <div class="meta-card"><dt>Starts</dt><dd>{formatPretty(chapter.Start)}</dd></div>}
+    {chapter.End && <div class="meta-card"><dt>Ends</dt><dd>{formatPretty(chapter.End)}</dd></div>}
   </section>
 
-  <section class="pdf-section" id="pdf-section">
-    <h2>Reading material</h2>
-    {pdfPath ? (
-      <PdfViewer path={pdfPath} label={chapter["Chapter / Unit"]} />
-    ) : (
-      <p class="pdf-empty">
-        No PDF linked yet. Add a <code>PDF URL</code> value for this chapter in the Syllabus tab
-        (e.g. <code>pdfs/{chapter["Chapter / Unit"].toLowerCase().replace(/[^a-z0-9]+/g, "-")}.pdf</code>),
-        then drop the file into <code>public/pdfs/</code>.
+  <section class="pdfs">
+    <header class="pdfs__head">
+      <h2>Reading material</h2>
+      <span class="pdfs__count">{myPdfs.length} PDF{myPdfs.length === 1 ? "" : "s"}</span>
+    </header>
+
+    {pdfGroups.length === 0 ? (
+      <p class="pdfs__empty">
+        No PDFs linked to this chapter yet. Add a row to the <code>11 · PDFs</code> tab
+        in your Google Sheet (Paper <code>{chapter.Paper}</code>, Ch# <code>{chapter["Ch#"]}</code>),
+        then drop the file into <code>public/pdfs/</code>. See <code>MAINTENANCE.md</code> §11.
       </p>
+    ) : (
+      pdfGroups.map((g) => (
+        <div class="pdfs__group">
+          <h3 class="pdfs__group-title">{g.category}</h3>
+          <div class="pdfs__grid">
+            {g.items.map((p) => (
+              <PdfCard
+                title={p.Title}
+                path={p.Path}
+                category={g.category}
+                paper={p.Paper}
+                chapter={p["Ch#"]}
+                pages={p.Pages}
+                notes={p.Notes}
+              />
+            ))}
+          </div>
+        </div>
+      ))
     )}
   </section>
 
@@ -96,7 +101,9 @@ const pdfPath = chapter["PDF URL"];
     </section>
   )}
 
-  <p class="backlink"><a href={`${import.meta.env.BASE_URL}/syllabus`}>← All chapters</a></p>
+  <p class="backlink">
+    <a href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/syllabus`}>← All chapters</a>
+  </p>
 </Base>
 
 <style>
@@ -141,28 +148,53 @@ const pdfPath = chapter["PDF URL"];
     font-weight: 400;
   }
 
-  .pdf-section h2, .notes h2 {
+  .pdfs__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+    margin-bottom: var(--s-4);
+  }
+  .pdfs__head h2 {
+    margin: 0;
     font-size: var(--t-h4);
     font-weight: 500;
-    margin: 0 0 var(--s-3);
   }
-  .pdf-frame {
-    background: var(--bg-card);
-    border: 1px solid var(--rule);
-    border-radius: var(--radius);
-    min-height: 60vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .pdf-placeholder, .pdf-empty {
+  .pdfs__count {
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
     color: var(--ink-mute);
-    text-align: center;
-    padding: var(--s-6) var(--s-5);
-    max-width: 520px;
-    margin: 0 auto;
+    margin-left: auto;
   }
-  code { background: var(--cream-2); padding: 1px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 13px; }
+  .pdfs__empty {
+    color: var(--ink-mute);
+    padding: var(--s-5);
+    background: var(--bg-card);
+    border: 1px dashed var(--rule-2);
+    border-radius: var(--radius);
+  }
+  .pdfs__group {
+    margin-bottom: var(--s-5);
+  }
+  .pdfs__group-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    margin: 0 0 var(--s-2);
+  }
+  .pdfs__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--s-3);
+  }
+  code {
+    background: var(--cream-2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
 
   .notes {
     margin-top: var(--s-7);
@@ -170,6 +202,11 @@ const pdfPath = chapter["PDF URL"];
     border: 1px solid var(--rule);
     border-radius: var(--radius);
     padding: var(--s-5);
+  }
+  .notes h2 {
+    font-size: var(--t-h4);
+    font-weight: 500;
+    margin: 0 0 var(--s-3);
   }
 
   .backlink {

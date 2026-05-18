@@ -84,6 +84,16 @@ export interface NoteRow {
   Content?: string | null;
 }
 
+export interface PdfRecord {
+  Category: string;
+  Paper?: string | null;     // "P4" | "P5" | "P6A" | "P6B" | "P6" | "" (all)
+  "Ch#"?: number | string | null;
+  Title: string;
+  Path: string;
+  Pages?: number | null;
+  Notes?: string | null;
+}
+
 export interface WellnessRow {
   Topic?: string | null;
   Detail?: string | null;
@@ -106,4 +116,5 @@ export type TabKey =
   | "key-dates"
   | "resources"
   | "wellness"
-  | "notes";
+  | "notes"
+  | "pdfs";

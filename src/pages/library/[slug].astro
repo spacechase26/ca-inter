@@ -1,0 +1,47 @@
+---
+import Base from "../../layouts/Base.astro";
+import PdfViewer from "../../components/PdfViewer.astro";
+import { getSnapshot } from "../../lib/sheets";
+import { pdfSlug } from "../../lib/pdf";
+import type { PdfRecord } from "../../types/sheet";
+
+export async function getStaticPaths() {
+  const snap = getSnapshot("pdfs");
+  const rows = snap.rows.filter((r) => r["Path"]) as unknown as PdfRecord[];
+
+  // De-dupe by slug (same Path may appear in multiple Sheet rows; one viewer page each).
+  const seen = new Set<string>();
+  return rows
+    .filter((p) => {
+      const s = pdfSlug(p.Path);
+      if (seen.has(s)) return false;
+      seen.add(s);
+      return true;
+    })
+    .map((p) => ({
+      params: { slug: pdfSlug(p.Path) },
+      props: { record: p },
+    }));
+}
+
+interface Props {
+  record: PdfRecord;
+}
+const { record } = Astro.props;
+const eyebrow = [record.Category, record.Paper, record["Ch#"] ? `Ch ${record["Ch#"]}` : null]
+  .filter(Boolean)
+  .join(" · ");
+---
+<Base eyebrow={eyebrow} title={record.Title} description={record.Notes ?? undefined}>
+  <PdfViewer path={record.Path} label={record.Title} />
+  <p class="backlink">
+    <a href={`${import.meta.env.BASE_URL.replace(/\/$/, "")}/library`}>← Library</a>
+  </p>
+</Base>
+
+<style>
+  .backlink {
+    margin-top: var(--s-5);
+    font-size: var(--t-meta);
+  }
+</style>

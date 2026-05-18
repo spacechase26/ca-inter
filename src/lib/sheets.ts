@@ -12,6 +12,7 @@ import keyDatesSnap from "../data/snapshots/key-dates.json";
 import resourcesSnap from "../data/snapshots/resources.json";
 import wellnessSnap from "../data/snapshots/wellness.json";
 import notesSnap from "../data/snapshots/notes.json";
+import pdfsSnap from "../data/snapshots/pdfs.json";
 
 /**
  * --- Configuration ---------------------------------------------------------
@@ -41,6 +42,7 @@ export const TAB_GIDS: Record<TabKey, string> = {
   resources:    "1407088913",
   wellness:     "1451834793",
   notes:        "1210908289",
+  pdfs:         "", // paste after re-publishing the Sheet with the new "11 · PDFs" tab
 };
 
 const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -56,6 +58,7 @@ const SNAPSHOTS: Record<TabKey, SheetData> = {
   resources:   resourcesSnap as SheetData,
   wellness:    wellnessSnap as SheetData,
   notes:       notesSnap as SheetData,
+  pdfs:        pdfsSnap as SheetData,
 };
 
 export function isLiveConfigured(): boolean {

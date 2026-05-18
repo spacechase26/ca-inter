@@ -1,0 +1,109 @@
+---
+import { categoryKey, pdfSlug } from "../lib/pdf";
+
+interface Props {
+  title: string;
+  path: string;
+  category: string;
+  paper?: string | null;
+  chapter?: string | number | null;
+  pages?: number | null;
+  notes?: string | null;
+}
+
+const { title, path, category, paper, chapter, pages, notes } = Astro.props;
+const slug = pdfSlug(path);
+const catKey = categoryKey(category);
+const href = `${import.meta.env.BASE_URL.replace(/\/$/, "")}/library/${slug}`;
+const paperKey = paper ? paper.toLowerCase() : "";
+---
+<a class={`pcard pcard--cat-${catKey}`} href={href}>
+  <div class="pcard__head">
+    <span class={`chip pcard__cat`}>{category}</span>
+    {paper && <span class={`chip chip--${paperKey} pcard__paper`}>{paper}{chapter ? ` · Ch ${chapter}` : ""}</span>}
+    {pages != null && <span class="pcard__pages">{pages}p</span>}
+  </div>
+  <h3 class="pcard__title">{title}</h3>
+  {notes && <p class="pcard__notes">{notes}</p>}
+  <span class="pcard__cta" aria-hidden="true">Open →</span>
+</a>
+
+<style>
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent, var(--ink-mute));
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-4);
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .pcard:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+    border-color: var(--rule-2);
+  }
+  .pcard:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  /* Category accents */
+  .pcard--cat-icai-study-material { --accent: var(--p4); }
+  .pcard--cat-rtp                  { --accent: var(--p5); }
+  .pcard--cat-mtp                  { --accent: var(--ph2); }
+  .pcard--cat-qp                   { --accent: var(--p6a); }
+  .pcard--cat-external             { --accent: var(--p6b); }
+  .pcard--cat-scanners             { --accent: var(--ph3); }
+  .pcard--cat-notes                { --accent: var(--ph4); }
+  .pcard--cat-charts               { --accent: var(--ph1); }
+
+  .pcard__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .pcard__cat {
+    background: var(--bg-elev);
+    color: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pcard__paper { font-size: 11px; }
+  .pcard__pages {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+  }
+
+  .pcard__title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 0;
+  }
+  .pcard__notes {
+    margin: 0;
+    font-size: 12px;
+    color: var(--ink-mute);
+    line-height: 1.4;
+  }
+  .pcard__cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    margin-top: 2px;
+  }
+  .pcard:hover .pcard__cta { color: var(--ink); }
+</style>

@@ -1,0 +1,796 @@
+{
+  "headers": [
+    "Category",
+    "Paper",
+    "Ch#",
+    "Title",
+    "Path",
+    "Pages",
+    "Notes"
+  ],
+  "rows": [
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "Initial Pages — Module 1",
+      "Path": "icai/study-material/p4-costing/ip-m1.pdf",
+      "Pages": null,
+      "Notes": "Front matter, syllabus, index"
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "1",
+      "Title": "Introduction to Cost & Management Accounting",
+      "Path": "icai/study-material/p4-costing/ch01.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "2",
+      "Title": "Material Cost",
+      "Path": "icai/study-material/p4-costing/ch02.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "3",
+      "Title": "Employee Cost & Direct Expenses",
+      "Path": "icai/study-material/p4-costing/ch03.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "4",
+      "Title": "Overheads — Absorption Costing",
+      "Path": "icai/study-material/p4-costing/ch04.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "5",
+      "Title": "Activity Based Costing",
+      "Path": "icai/study-material/p4-costing/ch05.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "6",
+      "Title": "Cost Sheet",
+      "Path": "icai/study-material/p4-costing/ch06.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "7",
+      "Title": "Cost Accounting Systems",
+      "Path": "icai/study-material/p4-costing/ch07.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "Initial Pages — Module 2",
+      "Path": "icai/study-material/p4-costing/ip-m2.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "8",
+      "Title": "Unit & Batch Costing",
+      "Path": "icai/study-material/p4-costing/ch08.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "9",
+      "Title": "Job Costing",
+      "Path": "icai/study-material/p4-costing/ch09.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "10",
+      "Title": "Process & Operation Costing",
+      "Path": "icai/study-material/p4-costing/ch10.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "11",
+      "Title": "Joint Products & By-Products",
+      "Path": "icai/study-material/p4-costing/ch11.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "12",
+      "Title": "Service Costing",
+      "Path": "icai/study-material/p4-costing/ch12.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "13",
+      "Title": "Standard Costing",
+      "Path": "icai/study-material/p4-costing/ch13.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "14",
+      "Title": "Marginal Costing",
+      "Path": "icai/study-material/p4-costing/ch14.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P4",
+      "Ch#": "15",
+      "Title": "Budgets & Budgetary Control",
+      "Path": "icai/study-material/p4-costing/ch15.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "Initial Pages — Module 1",
+      "Path": "icai/study-material/p5-audit/ip-m1.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "1",
+      "Title": "Nature, Objective & Scope of Audit",
+      "Path": "icai/study-material/p5-audit/ch01.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "2",
+      "Title": "Audit Strategy, Audit Planning & Audit Programme",
+      "Path": "icai/study-material/p5-audit/ch02.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "3",
+      "Title": "Risk Assessment & Internal Control",
+      "Path": "icai/study-material/p5-audit/ch03.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "4",
+      "Title": "Audit Evidence",
+      "Path": "icai/study-material/p5-audit/ch04.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "5",
+      "Title": "Audit of Items of Financial Statements",
+      "Path": "icai/study-material/p5-audit/ch05.pdf",
+      "Pages": null,
+      "Notes": "~18% paper weightage"
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "Initial Pages — Module 2",
+      "Path": "icai/study-material/p5-audit/ip-m2.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "6",
+      "Title": "Audit Documentation",
+      "Path": "icai/study-material/p5-audit/ch06.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "7",
+      "Title": "Completion & Review",
+      "Path": "icai/study-material/p5-audit/ch07.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "8",
+      "Title": "Audit Report",
+      "Path": "icai/study-material/p5-audit/ch08.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "9",
+      "Title": "Special Features of Audit of Different Types of Entities",
+      "Path": "icai/study-material/p5-audit/ch09.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "10",
+      "Title": "Audit of Banks",
+      "Path": "icai/study-material/p5-audit/ch10.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P5",
+      "Ch#": "11",
+      "Title": "Ethics & Terms of Audit Engagements",
+      "Path": "icai/study-material/p5-audit/ch11.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": null,
+      "Title": "Initial Pages — Module 1",
+      "Path": "icai/study-material/p6a-fm/ip-m1.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "1",
+      "Title": "Scope & Objectives of Financial Management",
+      "Path": "icai/study-material/p6a-fm/ch01.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "2",
+      "Title": "Types of Financing",
+      "Path": "icai/study-material/p6a-fm/ch02.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "3",
+      "Title": "Financial Analysis & Planning — Ratio Analysis",
+      "Path": "icai/study-material/p6a-fm/ch03.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "4",
+      "Title": "Cost of Capital",
+      "Path": "icai/study-material/p6a-fm/ch04.pdf",
+      "Pages": null,
+      "Notes": "~14% paper weightage"
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "5",
+      "Title": "Financing Decisions — Capital Structure",
+      "Path": "icai/study-material/p6a-fm/ch05.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "6",
+      "Title": "Financing Decisions — Leverages",
+      "Path": "icai/study-material/p6a-fm/ch06.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": null,
+      "Title": "Appendix — Module 1",
+      "Path": "icai/study-material/p6a-fm/appdx-m1.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": null,
+      "Title": "Initial Pages — Module 2",
+      "Path": "icai/study-material/p6a-fm/ip-m2.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "7",
+      "Title": "Investment Decisions (Capital Budgeting)",
+      "Path": "icai/study-material/p6a-fm/ch07.pdf",
+      "Pages": null,
+      "Notes": "~16% paper weightage"
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "8",
+      "Title": "Dividend Decision",
+      "Path": "icai/study-material/p6a-fm/ch08.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "9",
+      "Title": "WCM Unit I — Introduction to Working Capital Mgmt",
+      "Path": "icai/study-material/p6a-fm/ch09u1.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "10",
+      "Title": "WCM Unit II — Treasury & Cash Management",
+      "Path": "icai/study-material/p6a-fm/ch09u2.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "11",
+      "Title": "WCM Unit III — Management of Inventory",
+      "Path": "icai/study-material/p6a-fm/ch09u3.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "12",
+      "Title": "WCM Unit IV — Management of Receivables",
+      "Path": "icai/study-material/p6a-fm/ch09u4.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "13",
+      "Title": "WCM Unit V — Management of Payables (Creditors)",
+      "Path": "icai/study-material/p6a-fm/ch09u5.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": "14",
+      "Title": "WCM Unit VI — Financing of Working Capital",
+      "Path": "icai/study-material/p6a-fm/ch09u6.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6A",
+      "Ch#": null,
+      "Title": "Appendix — Module 2",
+      "Path": "icai/study-material/p6a-fm/appdx-m2.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6B",
+      "Ch#": null,
+      "Title": "Initial Pages",
+      "Path": "icai/study-material/p6b-sm/ip.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6B",
+      "Ch#": "1",
+      "Title": "Introduction to Strategic Management",
+      "Path": "icai/study-material/p6b-sm/ch01.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6B",
+      "Ch#": "2",
+      "Title": "Strategic Analysis — External Environment",
+      "Path": "icai/study-material/p6b-sm/ch02.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6B",
+      "Ch#": "3",
+      "Title": "Strategic Analysis — Internal Environment",
+      "Path": "icai/study-material/p6b-sm/ch03.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6B",
+      "Ch#": "4",
+      "Title": "Strategic Choices",
+      "Path": "icai/study-material/p6b-sm/ch04.pdf",
+      "Pages": null,
+      "Notes": "~22% paper weightage"
+    },
+    {
+      "Category": "ICAI Study Material",
+      "Paper": "P6B",
+      "Ch#": "5",
+      "Title": "Strategy Implementation & Evaluation",
+      "Path": "icai/study-material/p6b-sm/ch05.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "RTP · May 2025 · Costing",
+      "Path": "icai/rtp/p4-may2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "RTP · May 2025 · Audit & Ethics",
+      "Path": "icai/rtp/p5-may2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "RTP · May 2025 · FM & SM",
+      "Path": "icai/rtp/p6-may2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "RTP · Sep 2025 · Costing",
+      "Path": "icai/rtp/p4-sep2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "RTP · Sep 2025 · Audit & Ethics",
+      "Path": "icai/rtp/p5-sep2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "RTP · Sep 2025 · FM & SM",
+      "Path": "icai/rtp/p6-sep2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "RTP · Jan 2026 · Costing",
+      "Path": "icai/rtp/p4-jan2026.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "RTP · Jan 2026 · Audit & Ethics",
+      "Path": "icai/rtp/p5-jan2026.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "RTP · Jan 2026 · FM & SM",
+      "Path": "icai/rtp/p6-jan2026.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "RTP · May 2026 · Costing",
+      "Path": "icai/rtp/p4-may2026.pdf",
+      "Pages": null,
+      "Notes": "Latest"
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "RTP · May 2026 · Audit & Ethics",
+      "Path": "icai/rtp/p5-may2026.pdf",
+      "Pages": null,
+      "Notes": "Latest"
+    },
+    {
+      "Category": "RTP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "RTP · May 2026 · FM & SM",
+      "Path": "icai/rtp/p6-may2026.pdf",
+      "Pages": null,
+      "Notes": "Latest"
+    },
+    {
+      "Category": "QP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2024 · Costing",
+      "Path": "icai/qp/p4-may2024.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2024 · Audit & Ethics",
+      "Path": "icai/qp/p5-may2024.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2024 · FM & SM",
+      "Path": "icai/qp/p6-may2024.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "QP & Suggested · Sep 2024 · Costing",
+      "Path": "icai/qp/p4-sep2024.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "QP & Suggested · Sep 2024 · Audit & Ethics",
+      "Path": "icai/qp/p5-sep2024.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "QP & Suggested · Sep 2024 · FM & SM",
+      "Path": "icai/qp/p6-sep2024.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "QP & Suggested · Jan 2025 · Costing",
+      "Path": "icai/qp/p4-jan2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "QP & Suggested · Jan 2025 · Audit & Ethics",
+      "Path": "icai/qp/p5-jan2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "QP & Suggested · Jan 2025 · FM & SM",
+      "Path": "icai/qp/p6-jan2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2025 · Costing",
+      "Path": "icai/qp/p4-may2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2025 · Audit & Ethics",
+      "Path": "icai/qp/p5-may2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2025 · FM & SM",
+      "Path": "icai/qp/p6-may2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "QP & Suggested · Sep 2025 · Costing",
+      "Path": "icai/qp/p4-sep2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "QP & Suggested · Sep 2025 · Audit & Ethics",
+      "Path": "icai/qp/p5-sep2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "QP & Suggested · Sep 2025 · FM & SM",
+      "Path": "icai/qp/p6-sep2025.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "QP & Suggested · Jan 2026 · Costing",
+      "Path": "icai/qp/p4-jan2026.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "QP & Suggested · Jan 2026 · Audit & Ethics",
+      "Path": "icai/qp/p5-jan2026.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "QP & Suggested · Jan 2026 · FM & SM",
+      "Path": "icai/qp/p6-jan2026.pdf",
+      "Pages": null,
+      "Notes": null
+    },
+    {
+      "Category": "QP",
+      "Paper": "P4",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2026 · Costing",
+      "Path": "icai/qp/p4-may2026.pdf",
+      "Pages": null,
+      "Notes": "Most recent"
+    },
+    {
+      "Category": "QP",
+      "Paper": "P5",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2026 · Audit & Ethics",
+      "Path": "icai/qp/p5-may2026.pdf",
+      "Pages": null,
+      "Notes": "Most recent"
+    },
+    {
+      "Category": "QP",
+      "Paper": "P6",
+      "Ch#": null,
+      "Title": "QP & Suggested · May 2026 · FM & SM",
+      "Path": "icai/qp/p6-may2026.pdf",
+      "Pages": null,
+      "Notes": "Most recent"
+    }
+  ]
+}
