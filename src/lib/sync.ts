@@ -10,7 +10,11 @@ export const APPS_SCRIPT_URL: string =
   "https://script.google.com/macros/s/AKfycbxW2hZK9_r7yRpuTKHFvzGJtSm4y0fbhDDQic33CYmHDWSfuVDCJoTCKnKsgu_Ig7V00Q/exec";
 
 const LS_PREFIX = "pdf:lastPage:";
+const LS_TS_PREFIX = "pdf:lastPageTs:";
 const POST_DEBOUNCE_MS = 1500;
+/** If our local copy was written within this window, treat it as authoritative
+ *  and skip the remote getLastPage round-trip (saves 300–800 ms per remount). */
+const LOCAL_FRESH_MS = 30_000;
 
 function lsGet(key: string): number {
   try {
@@ -23,15 +27,34 @@ function lsGet(key: string): number {
   }
 }
 
+function lsGetTs(key: string): number {
+  try {
+    const v = localStorage.getItem(LS_TS_PREFIX + key);
+    if (!v) return 0;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  } catch {
+    return 0;
+  }
+}
+
 /** Synchronous read of the local last-page value. Use to render page 1 fast,
  *  then reconcile with the remote via getLastPage() after first paint. */
 export function getLastPageLocal(key: string): number {
   return lsGet(key);
 }
 
+/** True if we wrote this key locally in the last LOCAL_FRESH_MS — meaning
+ *  the remote can't have newer data and we can skip the Apps Script call. */
+export function isLocalFresh(key: string): boolean {
+  const ts = lsGetTs(key);
+  return ts > 0 && Date.now() - ts < LOCAL_FRESH_MS;
+}
+
 function lsSet(key: string, page: number): void {
   try {
     localStorage.setItem(LS_PREFIX + key, String(page));
+    localStorage.setItem(LS_TS_PREFIX + key, String(Date.now()));
   } catch {
     /* ignore */
   }

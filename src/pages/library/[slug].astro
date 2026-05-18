@@ -9,9 +9,20 @@ export async function getStaticPaths() {
   const snap = getSnapshot("pdfs");
   const rows = snap.rows.filter((r) => r["Path"]) as unknown as PdfRecord[];
 
-  // De-dupe by slug (same Path may appear in multiple Sheet rows; one viewer page each).
+  // When the same Path appears in multiple rows (e.g. one paper-wide row + one
+  // chapter-specific row), prefer the most general row for the viewer page —
+  // the eyebrow shouldn't claim "Ch 3" for a PDF that's actually paper-wide.
+  // Generality: blank Paper + blank Ch# (cross-paper) > blank Ch# (paper-wide)
+  // > specific Ch#. Stable-sort, then take first per slug.
+  const generality = (r: PdfRecord) => {
+    const hasPaper = (r.Paper ?? "").trim() !== "";
+    const hasCh = String(r["Ch#"] ?? "").trim() !== "";
+    return (hasPaper ? 1 : 0) + (hasCh ? 1 : 0); // 0 = most general
+  };
+  const sorted = [...rows].sort((a, b) => generality(a) - generality(b));
+
   const seen = new Set<string>();
-  return rows
+  return sorted
     .filter((p) => {
       const s = pdfSlug(p.Path);
       if (seen.has(s)) return false;

@@ -9,7 +9,11 @@ const snap = getSnapshot("pdfs");
 const pdfs = snap.rows.filter((r) => r["Path"]) as unknown as PdfRecord[];
 const groups = groupByCategory(pdfs);
 const total = pdfs.length;
-const papers = Array.from(new Set(pdfs.map((p) => p.Paper).filter(Boolean))) as string[];
+// Hide the literal "P6" chip — it's a Sheet convention for Group-II RTPs/QPs
+// that cover both FM (P6A) and SM (P6B). Users think in P6A / P6B, and either
+// of those filters already pulls the P6-marked PDFs in via the matcher below.
+const papers = Array.from(new Set(pdfs.map((p) => p.Paper).filter(Boolean)))
+  .filter((p) => p !== "P6") as string[];
 papers.sort();
 ---
 <Base

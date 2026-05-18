@@ -28,7 +28,7 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     <div class="pdfv__status">
       <span class="pdfv__sync" data-role="sync" aria-live="polite"></span>
       <button class="pdfv__btn pdfv__fs" data-act="fullscreen" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⤢</button>
-      <a class="pdfv__download" href={src} download aria-label="Download PDF">⤓</a>
+      <button class="pdfv__btn pdfv__download" data-act="download" type="button" aria-label="Download PDF" title="Download">⤓</button>
     </div>
   </div>
   <div class="pdfv__viewport">
@@ -46,7 +46,7 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
 
 <script>
   import * as pdfjsLib from "pdfjs-dist";
-  import { getLastPage, getLastPageLocal, setLastPage } from "../lib/sync";
+  import { getLastPage, getLastPageLocal, isLocalFresh, setLastPage } from "../lib/sync";
 
   // PDF.js worker — served from our own origin (copied into public/ at build time
   // by scripts/sync-pdf-worker.mjs). Avoids cross-origin module-worker quirks and
@@ -70,15 +70,17 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     // Try with worker first; fall back to in-thread mode if the worker can't load
     // (some privacy browsers block module workers).
     //
-    // `disableRange + disableStream` = single HTTP GET for the whole file. PDF.js's
-    // default range-request mode is faster for huge PDFs (~50 MB+) but slower for the
-    // 1–10 MB range we have here (multiple round-trips dominate latency).
+    // `disableRange: true` = single HTTP GET for the whole file (PDF.js's default
+    // range-request mode does many byte-range round-trips, which dominates latency
+    // for the 1–10 MB range we have here).
+    // `disableStream: false` = let PDF.js parse incrementally as bytes arrive, so
+    // page 1 can render before the whole file lands. Critical for the 9 MB QPs.
     const attempt = (disableWorker: boolean) => {
       const task = pdfjsLib.getDocument({
         url: src,
         disableWorker,
         disableRange: true,
-        disableStream: true,
+        disableStream: false,
       });
       task.onProgress = ({ loaded, total }: { loaded: number; total: number }) => {
         onProgress(loaded, total);
@@ -164,7 +166,12 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
       loading.hidden = true;
       error.hidden = false;
       if (detail && errorMsg) {
-        errorMsg.textContent = `Couldn't render this PDF (${detail}).`;
+        // jsdelivr caches new files for up to 10 min after a `git push`. Phrase
+        // the 404 case as "try again shortly" rather than the opaque PDF.js text.
+        const looksLike404 = /\b404\b|UnexpectedResponseException/.test(detail);
+        errorMsg.textContent = looksLike404
+          ? "This PDF isn't on the CDN yet — jsdelivr can take ~10 min to cache new files after push. Try again shortly."
+          : `Couldn't render this PDF (${detail}).`;
       }
     }
 
@@ -178,12 +185,45 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
       }
     }
 
+    async function handleDownload() {
+      // Browser ignores the `download` attribute on cross-origin URLs (jsdelivr)
+      // unless the server sends Content-Disposition (which it doesn't). So we
+      // grab the bytes ourselves and trigger a same-origin blob download.
+      // Prefer the parsed PDF's data — saves a network round-trip if loaded.
+      flashSync("Preparing download…");
+      try {
+        let blob: Blob;
+        if (state.pdf) {
+          const data = await state.pdf.getData();
+          blob = new Blob([data], { type: "application/pdf" });
+        } else {
+          const res = await fetch(src);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          blob = await res.blob();
+        }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = src.split("/").pop() || "download.pdf";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        flashSync("Downloaded ✓", 1500);
+      } catch (err) {
+        console.error("PDF download failed", err);
+        flashSync("Download failed — opening in new tab", 2500);
+        window.open(src, "_blank", "noopener,noreferrer");
+      }
+    }
+
     // Wire toolbar
     root.querySelector('[data-act="prev"]')?.addEventListener("click", () => goto(state.page - 1));
     root.querySelector('[data-act="next"]')?.addEventListener("click", () => goto(state.page + 1));
     root.querySelector('[data-act="zoom-in"]')?.addEventListener("click", () => { state.zoom = Math.min(3, state.zoom + 0.2); render(); });
     root.querySelector('[data-act="zoom-out"]')?.addEventListener("click", () => { state.zoom = Math.max(0.5, state.zoom - 0.2); render(); });
     root.querySelector('[data-act="fullscreen"]')?.addEventListener("click", toggleFullscreen);
+    root.querySelector('[data-act="download"]')?.addEventListener("click", handleDownload);
     pageInput.addEventListener("change", () => goto(Number(pageInput.value) || 1));
 
     // Keyboard nav when the viewer has focus
@@ -224,15 +264,19 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
       if (state.page > 1) flashSync(`Resumed page ${state.page}`, 2000);
 
       // Reconcile with remote in the background. If the user opened this PDF
-      // on another device more recently, jump to that page.
-      getLastPage(key).then((remoteRemembered) => {
-        const target = Math.min(state.pdf.numPages, Math.max(1, remoteRemembered));
-        if (target !== state.page) {
-          state.page = target;
-          flashSync(`Synced to page ${target}`, 2000);
-          render();
-        }
-      }).catch(() => { /* offline — localStorage already won */ });
+      // on another device more recently, jump to that page. Skip entirely when
+      // our local copy was written in the last 30 s — remote can't have newer
+      // data, so don't pay the Apps Script round-trip on every remount.
+      if (!isLocalFresh(key)) {
+        getLastPage(key).then((remoteRemembered) => {
+          const target = Math.min(state.pdf.numPages, Math.max(1, remoteRemembered));
+          if (target !== state.page) {
+            state.page = target;
+            flashSync(`Synced to page ${target}`, 2000);
+            render();
+          }
+        }).catch(() => { /* offline — localStorage already won */ });
+      }
     } catch (err) {
       console.error("PDF load error", err);
       showError(err instanceof Error ? err.message : String(err));

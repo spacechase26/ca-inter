@@ -8,6 +8,7 @@
     "dev": "astro dev --host 0.0.0.0 --port 4323",
     "prebuild": "node scripts/sync-pdf-worker.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/strip-dist-pdfs.mjs",
     "preview": "astro preview --host 0.0.0.0 --port 4324",
     "astro": "astro"
   },
