@@ -27,14 +27,18 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     </div>
     <div class="pdfv__status">
       <span class="pdfv__sync" data-role="sync" aria-live="polite"></span>
+      <button class="pdfv__btn pdfv__fs" data-act="fullscreen" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⤢</button>
       <a class="pdfv__download" href={src} download aria-label="Download PDF">⤓</a>
     </div>
   </div>
   <div class="pdfv__viewport">
     <canvas class="pdfv__canvas" aria-label={`${displayName} PDF page`}></canvas>
-    <p class="pdfv__loading" data-role="loading">Loading PDF…</p>
+    <div class="pdfv__loading" data-role="loading">
+      <span class="pdfv__loading-label" data-role="loading-label">Loading PDF…</span>
+      <div class="pdfv__progress"><div class="pdfv__progress-bar" data-role="progress-bar"></div></div>
+    </div>
     <p class="pdfv__error" data-role="error" hidden>
-      Couldn't render this PDF in the browser.
+      <span data-role="error-msg">Couldn't render this PDF in the browser.</span>
       <a href={src} download>Download instead →</a>
     </p>
   </div>
@@ -58,13 +62,39 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     nextPage: number | null;
   };
 
+  function formatMB(bytes: number): string {
+    return (bytes / 1024 / 1024).toFixed(1);
+  }
+
+  async function loadPdf(src: string, onProgress: (loaded: number, total: number) => void) {
+    // Try with worker first; fall back to in-thread mode if the worker can't load
+    // (some privacy browsers block module workers).
+    const attempt = (disableWorker: boolean) => {
+      const task = pdfjsLib.getDocument({ url: src, disableWorker });
+      task.onProgress = ({ loaded, total }: { loaded: number; total: number }) => {
+        onProgress(loaded, total);
+      };
+      return task.promise;
+    };
+
+    try {
+      return await attempt(false);
+    } catch (err) {
+      console.warn("PDF.js worker mode failed, retrying without worker:", err);
+      return await attempt(true);
+    }
+  }
+
   async function init(root: HTMLElement) {
     const src = root.dataset.src!;
     const key = root.dataset.key!;
     const canvas = root.querySelector("canvas.pdfv__canvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d")!;
     const loading = root.querySelector('[data-role="loading"]') as HTMLElement;
+    const loadingLabel = root.querySelector('[data-role="loading-label"]') as HTMLElement;
+    const progressBar = root.querySelector('[data-role="progress-bar"]') as HTMLElement;
     const error = root.querySelector('[data-role="error"]') as HTMLElement;
+    const errorMsg = root.querySelector('[data-role="error-msg"]') as HTMLElement;
     const totalEl = root.querySelector('[data-role="total"]') as HTMLElement;
     const zoomEl = root.querySelector('[data-role="zoom"]') as HTMLElement;
     const syncEl = root.querySelector('[data-role="sync"]') as HTMLElement;
@@ -92,7 +122,7 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
         zoomEl.textContent = `${Math.round(state.zoom * 100)}%`;
       } catch (err) {
         console.error("PDF render error", err);
-        showError();
+        showError(err instanceof Error ? err.message : String(err));
       } finally {
         state.rendering = false;
         if (state.nextPage !== null) {
@@ -121,9 +151,22 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
       }
     }
 
-    function showError() {
+    function showError(detail?: string) {
       loading.hidden = true;
       error.hidden = false;
+      if (detail && errorMsg) {
+        errorMsg.textContent = `Couldn't render this PDF (${detail}).`;
+      }
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      } else {
+        root.requestFullscreen?.().catch((err) => {
+          console.warn("Fullscreen request failed:", err);
+        });
+      }
     }
 
     // Wire toolbar
@@ -131,6 +174,7 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     root.querySelector('[data-act="next"]')?.addEventListener("click", () => goto(state.page + 1));
     root.querySelector('[data-act="zoom-in"]')?.addEventListener("click", () => { state.zoom = Math.min(3, state.zoom + 0.2); render(); });
     root.querySelector('[data-act="zoom-out"]')?.addEventListener("click", () => { state.zoom = Math.max(0.5, state.zoom - 0.2); render(); });
+    root.querySelector('[data-act="fullscreen"]')?.addEventListener("click", toggleFullscreen);
     pageInput.addEventListener("change", () => goto(Number(pageInput.value) || 1));
 
     // Keyboard nav when the viewer has focus
@@ -138,11 +182,26 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     root.addEventListener("keydown", (e) => {
       if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); goto(state.page + 1); }
       if (e.key === "ArrowLeft"  || e.key === "PageUp")   { e.preventDefault(); goto(state.page - 1); }
+      if (e.key === "f" || e.key === "F") { e.preventDefault(); toggleFullscreen(); }
     });
+
+    // Update loading progress
+    const onProgress = (loaded: number, total: number) => {
+      const loadedMB = formatMB(loaded);
+      if (total > 0) {
+        const totalMB = formatMB(total);
+        const pct = Math.min(100, Math.round((loaded / total) * 100));
+        loadingLabel.textContent = `Loading PDF… ${loadedMB} / ${totalMB} MB (${pct}%)`;
+        progressBar.style.width = `${pct}%`;
+      } else {
+        loadingLabel.textContent = `Loading PDF… ${loadedMB} MB`;
+        progressBar.style.width = `0%`;
+      }
+    };
 
     // Load the document
     try {
-      state.pdf = await pdfjsLib.getDocument(src).promise;
+      state.pdf = await loadPdf(src, onProgress);
       totalEl.textContent = String(state.pdf.numPages);
       loading.hidden = true;
 
@@ -153,7 +212,7 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
       if (remembered > 1) flashSync(`Resumed page ${remembered}`, 2000);
     } catch (err) {
       console.error("PDF load error", err);
-      showError();
+      showError(err instanceof Error ? err.message : String(err));
     }
   }
 
@@ -170,6 +229,11 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     display: flex;
     flex-direction: column;
     min-height: 70vh;
+  }
+  .pdfv:fullscreen {
+    border-radius: 0;
+    border: none;
+    background: var(--cream);
   }
   .pdfv__bar {
     display: flex;
@@ -197,6 +261,7 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     cursor: pointer;
   }
   .pdfv__btn:hover { background: var(--cream-2); }
+  .pdfv__fs { font-size: 14px; }
   .pdfv__pageinfo {
     display: inline-flex;
     align-items: center;
@@ -253,7 +318,36 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     background: white;
     border-radius: 4px;
   }
-  .pdfv__loading, .pdfv__error {
+  .pdfv__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-3);
+    color: var(--ink-mute);
+    margin: 0;
+    pointer-events: none;
+  }
+  .pdfv__loading-label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .pdfv__progress {
+    width: min(240px, 60%);
+    height: 4px;
+    background: var(--rule);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .pdfv__progress-bar {
+    width: 0;
+    height: 100%;
+    background: var(--ink-2);
+    transition: width 120ms linear;
+  }
+  .pdfv__error {
     position: absolute;
     inset: 0;
     display: flex;
@@ -261,9 +355,11 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
     justify-content: center;
     color: var(--ink-mute);
     margin: 0;
-    pointer-events: none;
+    gap: 8px;
+    text-align: center;
+    padding: var(--s-4);
   }
-  .pdfv__error { pointer-events: auto; gap: 8px; }
+  .pdfv__loading[hidden], .pdfv__error[hidden] { display: none; }
 
   @media (max-width: 540px) {
     .pdfv__bar { padding: var(--s-2); }
