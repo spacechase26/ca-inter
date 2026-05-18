@@ -44,10 +44,10 @@ const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? pa
   import * as pdfjsLib from "pdfjs-dist";
   import { getLastPage, setLastPage } from "../lib/sync";
 
-  // PDF.js worker — load from CDN to keep the deploy small.
-  // Version must match the installed pdfjs-dist (currently 4.x).
+  // PDF.js worker — load from CDN, pinned to the exact installed version.
+  // (Mismatched API/worker versions silently break rendering.)
   pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.worker.min.mjs";
+    `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/build/pdf.worker.min.mjs`;
 
   type State = {
     pdf: any;
