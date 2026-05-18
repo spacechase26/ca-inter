@@ -42,7 +42,7 @@ export const TAB_GIDS: Record<TabKey, string> = {
   resources:    "1407088913",
   wellness:     "1451834793",
   notes:        "1210908289",
-  pdfs:         "", // paste after re-publishing the Sheet with the new "11 · PDFs" tab
+  pdfs:         "665233018",
 };
 
 const CACHE_TTL_MS = 5 * 60 * 1000;
