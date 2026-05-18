@@ -1,4 +1,4 @@
-# CA Inter G2 Companion
+# CA Inter Companion
 
 A static viewer for your CA Inter Group 2 study planner. Reads live from your Google Sheet, ships an 87-PDF ICAI study library out of the box, renders PDFs inline (with cross-device resume), no database, no auth.
 
