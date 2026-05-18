@@ -162,6 +162,7 @@ If the ICAI syllabus changes mid-prep (rare) or you want to break a chapter into
 | Chapter detail page | `src/pages/syllabus/[chapter].astro` |
 | Daily plan row appearance | `src/components/DailyRow.astro` |
 | PDF viewer toolbar | `src/components/PdfViewer.astro` |
+| PDF card (library + chapter pages) | `src/components/PdfCard.astro` |
 
 After editing: `npm run dev` to preview locally, then `git push` to deploy.
 
@@ -222,7 +223,7 @@ Kill it with `kill <PID>` if you want to restart fresh.
 | Mark `Done?` = TRUE on a chapter | Syllabus card grays out, dashboard "% chapters done" updates |
 | Log `Actual hrs` on a daily row | Today card + dashboard "Actual logged" total |
 | Log `Marks scored` + `Done date` on a mock | Mocks page shows ✓ and % score; dashboard "Average score" recomputes |
-| Edit a chapter's `PDF URL` | Chapter detail page mounts the PDF viewer |
+| Add a row to the `11 · PDFs` tab | The matching chapter pages + `/library` index pick it up (jsdelivr cache lag ~5–10 min after `git push` of the file) |
 | Add a row to Resources | Resources page picks it up automatically |
 | Edit a Wellness section item | Wellness page reflects it (after CSV refresh) |
 
