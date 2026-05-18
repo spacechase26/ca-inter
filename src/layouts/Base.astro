@@ -56,6 +56,7 @@ const base = import.meta.env.BASE_URL;
       </div>
     </header>
     <main>
+      <slot name="hero" />
       <div class="container page">
         {eyebrow && <p class="eyebrow">{eyebrow}</p>}
         <h1 class="page__title">{title}</h1>
@@ -65,43 +66,10 @@ const base = import.meta.env.BASE_URL;
     </main>
     <footer class="footer">
       <div class="container footer__inner">
-        <blockquote class="quote" data-role="quote">
-          <span class="quote__text" data-role="quote-text">Discipline is the bridge between goals and accomplishment.</span>
-          <cite class="quote__author" data-role="quote-author">— Jim Rohn</cite>
-        </blockquote>
-        <div class="footer__meta">
-          <span class="meta">CA Inter · Group 2 · Jan 2027 · Harendra K.</span>
-          <span class="meta">Data lives in your Google Sheet · synced live</span>
-        </div>
+        <span class="meta">CA Inter · Group 2 · Jan 2027 · Harendra K.</span>
+        <span class="meta">Data lives in your Google Sheet · synced live</span>
       </div>
     </footer>
-
-    <script>
-      // Rotate quote by day-of-year so it changes once a day, deterministically.
-      const QUOTES = [
-        ["Discipline is the bridge between goals and accomplishment.", "Jim Rohn"],
-        ["Success is the sum of small efforts repeated day in and day out.", "Robert Collier"],
-        ["It always seems impossible until it's done.", "Nelson Mandela"],
-        ["He who has a why to live can bear almost any how.", "Friedrich Nietzsche"],
-        ["The expert in anything was once a beginner.", "Helen Hayes"],
-        ["Compound interest is the eighth wonder of the world.", "Albert Einstein"],
-        ["You don't have to be great to start, but you have to start to be great.", "Zig Ziglar"],
-        ["Hard work beats talent when talent doesn't work hard.", "Tim Notke"],
-        ["The future depends on what you do today.", "Mahatma Gandhi"],
-        ["Don't watch the clock; do what it does. Keep going.", "Sam Levenson"],
-        ["A river cuts through rock not because of its power, but its persistence.", "James N. Watkins"],
-        ["Motivation is what gets you started. Habit is what keeps you going.", "Jim Rohn"],
-        ["Quality is not an act, it is a habit.", "Aristotle"],
-        ["Excellence is a continuous process and not an accident.", "A. P. J. Abdul Kalam"],
-      ];
-      const d = new Date();
-      const dayOfYear = Math.floor((d.valueOf() - new Date(d.getFullYear(), 0, 0).valueOf()) / 86400000);
-      const [text, author] = QUOTES[dayOfYear % QUOTES.length];
-      const t = document.querySelector('[data-role="quote-text"]');
-      const a = document.querySelector('[data-role="quote-author"]');
-      if (t) t.textContent = text;
-      if (a) a.textContent = `— ${author}`;
-    </script>
 
     <style>
       .topbar {
@@ -170,40 +138,9 @@ const base = import.meta.env.BASE_URL;
       }
       .footer__inner {
         display: flex;
-        flex-direction: column;
-        gap: var(--s-4);
-      }
-      .footer__meta {
-        display: flex;
         justify-content: space-between;
         gap: var(--s-3);
         flex-wrap: wrap;
-      }
-      .quote {
-        margin: 0;
-        padding: var(--s-3) 0;
-        text-align: center;
-        font-family: var(--font-display);
-        color: var(--ink-2);
-        max-width: 640px;
-        align-self: center;
-      }
-      .quote__text {
-        display: block;
-        font-size: 17px;
-        line-height: 1.45;
-        font-style: italic;
-        font-weight: 400;
-      }
-      .quote__author {
-        display: block;
-        margin-top: var(--s-2);
-        font-family: var(--font-mono);
-        font-size: 11px;
-        font-style: normal;
-        color: var(--ink-mute);
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
       }
 
       @media (max-width: 640px) {

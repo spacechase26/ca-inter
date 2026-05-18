@@ -46,6 +46,44 @@ const nextMock = upcomingMocks[0];
   title="Dashboard"
   description="One glance: where you are in the plan, what's next, and whether you're on pace."
 >
+  <section slot="hero" class="hero-quote" aria-label="Quote of the day">
+    <div class="container">
+      <blockquote class="quote">
+        <span class="quote__text" data-role="quote-text">Discipline is the bridge between goals and accomplishment.</span>
+        <cite class="quote__author" data-role="quote-author">— Jim Rohn</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <script>
+    // Rotate the quote by day-of-year so it changes once a day, deterministically.
+    const QUOTES = [
+      ["Discipline is the bridge between goals and accomplishment.", "Jim Rohn"],
+      ["Success is the sum of small efforts repeated day in and day out.", "Robert Collier"],
+      ["It always seems impossible until it's done.", "Nelson Mandela"],
+      ["He who has a why to live can bear almost any how.", "Friedrich Nietzsche"],
+      ["The expert in anything was once a beginner.", "Helen Hayes"],
+      ["Compound interest is the eighth wonder of the world.", "Albert Einstein"],
+      ["You don't have to be great to start, but you have to start to be great.", "Zig Ziglar"],
+      ["Hard work beats talent when talent doesn't work hard.", "Tim Notke"],
+      ["The future depends on what you do today.", "Mahatma Gandhi"],
+      ["Don't watch the clock; do what it does. Keep going.", "Sam Levenson"],
+      ["A river cuts through rock not because of its power, but its persistence.", "James N. Watkins"],
+      ["Motivation is what gets you started. Habit is what keeps you going.", "Jim Rohn"],
+      ["Quality is not an act, it is a habit.", "Aristotle"],
+      ["Excellence is a continuous process and not an accident.", "A. P. J. Abdul Kalam"],
+    ];
+    const d = new Date();
+    const dayOfYear = Math.floor(
+      (d.valueOf() - new Date(d.getFullYear(), 0, 0).valueOf()) / 86400000,
+    );
+    const [text, author] = QUOTES[dayOfYear % QUOTES.length];
+    const t = document.querySelector('[data-role="quote-text"]');
+    const a = document.querySelector('[data-role="quote-author"]');
+    if (t) t.textContent = text;
+    if (a) a.textContent = `— ${author}`;
+  </script>
+
   <section class="kpis">
     <KpiCard label="Days in plan" value={daysTotal} hint={`${daysElapsed} elapsed · ${daysRemaining} to go`} />
     <KpiCard label="Plan hours" value={totalPlanHrs} suffix="h" hint={`Actual logged: ${Math.round(totalActualHrs)}h`} />
@@ -210,5 +248,35 @@ const nextMock = upcomingMocks[0];
     color: var(--ink-mute);
     font-style: italic;
     margin: 0;
+  }
+
+  .hero-quote {
+    background: linear-gradient(180deg, var(--cream-2, var(--bg-elev)) 0%, var(--bg) 100%);
+    border-bottom: 1px solid var(--rule);
+    padding: clamp(40px, 7vw, 72px) 0;
+  }
+  .quote {
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--font-display);
+    color: var(--ink);
+    max-width: 720px;
+  }
+  .quote__text {
+    display: block;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.4;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .quote__author {
+    display: block;
+    margin-top: var(--s-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-style: normal;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
   }
 </style>
