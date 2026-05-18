@@ -27,19 +27,20 @@ import notesSnap from "../data/snapshots/notes.json";
  * takes priority and the snapshot becomes the offline / fetch-failure fallback.
  * --------------------------------------------------------------------------
  */
-export const SHEET_PUBLISHED_ID: string = ""; // <-- paste here once published
+export const SHEET_PUBLISHED_ID: string =
+  "2PACX-1vRdvz-leeAP8t43mtpaU9KY2PIJOc1XWCW32oMkhiMXGRSrlYWMItGi5Oz0iR91j4dgvWDP3Bl9cu1E";
 
 export const TAB_GIDS: Record<TabKey, string> = {
-  "start-here": "",
-  dashboard:   "",
-  syllabus:    "",
-  phases:      "",
-  daily:       "",
-  mocks:       "",
-  "key-dates": "",
-  resources:   "",
-  wellness:    "",
-  notes:       "",
+  "start-here": "2065557944",
+  dashboard:    "1026328095",
+  syllabus:     "1505086469",
+  phases:        "828842684",
+  daily:        "1126892428",
+  mocks:         "944393612",
+  "key-dates":  "1800174009",
+  resources:    "1407088913",
+  wellness:     "1451834793",
+  notes:        "1210908289",
 };
 
 const CACHE_TTL_MS = 5 * 60 * 1000;
