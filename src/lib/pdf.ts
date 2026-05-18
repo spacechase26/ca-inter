@@ -4,18 +4,30 @@ import type { Chapter, PdfRecord } from "../types/sheet";
  * PDF path + storage-key helpers.
  *
  * Sheet's `Path` column holds bare paths like `icai/study-material/p4-costing/ch02.pdf`.
- * `resolvePdf` prepends the deploy base URL so links work on localhost and /ca-inter/ alike.
+ * `resolvePdf` returns the URL the browser should fetch.
+ *
+ * In production, PDFs are served from jsdelivr's global CDN instead of GitHub
+ * Pages. The GH Pages → India route was empirically ~40× slower than jsdelivr
+ * (43 s vs 1 s for a 700 KB PDF). jsdelivr mirrors any public GitHub repo at
+ * `/gh/<owner>/<repo>@<ref>/<file>` and accepts PDFs up to 20 MB. Dev still
+ * serves from the local origin so unpushed files work.
  */
+const JSDELIVR_PDF_BASE =
+  "https://cdn.jsdelivr.net/gh/spacechase26/ca-inter@main/public";
 
 export function resolvePdf(path: string): string {
   if (/^https?:/.test(path)) return path;
-  const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
   let clean = path.replace(/^\/+/, "");
   // The Sheet's Path column uses paths relative to public/pdfs/ (e.g.
   // `icai/rtp/p4-may2026.pdf`). Auto-prepend `pdfs/` so users don't have to
   // type the redundant directory. If a path already starts with `pdfs/`,
   // keep it (back-compat with the retired Syllabus PDF URL column).
   if (!clean.startsWith("pdfs/")) clean = `pdfs/${clean}`;
+
+  if (import.meta.env.PROD) {
+    return `${JSDELIVR_PDF_BASE}/${clean}`;
+  }
+  const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
   return `${base}/${clean}`;
 }
 
