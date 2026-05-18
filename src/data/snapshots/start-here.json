@@ -1,0 +1,174 @@
+{
+  "headers": [
+    "EXAM DATE  (edit when ICAI announces)",
+    "DAYS REMAINING (live)",
+    "TARGET STUDY HOURS"
+  ],
+  "rows": [
+    {
+      "EXAM DATE  (edit when ICAI announces)": "2027-01-10",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": "~1,314"
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Yellow tint = you can change this cell",
+      "DAYS REMAINING (live)": "Auto-recalculates daily",
+      "TARGET STUDY HOURS": "6 hrs Mon-Sat + 3 hrs Sun = 39 hrs/wk"
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "📖  How to use this planner",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "1.  Open '2 · Dashboard' for live progress. It recalculates as you fill rows in '5 · Daily Plan'.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "2.  Each day, find today's row in Daily Plan → read columns E and F → study → fill the YELLOW Actual-hrs cell.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "3.  When you finish a chapter, tick the YELLOW Done? cell in '3 · Syllabus'.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "4.  After every mock, log the score in '6 · Mocks Log'. Dashboard's mock average refreshes automatically.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "5.  YELLOW cells = you can edit. All other cells are formulas or anchor data — don't overwrite them.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "6.  Sundays are deliberately lighter (3 hrs) to prevent burnout. Use them for review + exercise + family.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "7.  Every 6 weeks, take a full day off — pre-marked in '7 · Key Dates' with a 🏖.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "8.  When ICAI publishes the actual Jan 2027 timetable (Sep/Oct 2026), update the EXAM DATE cell above.",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "🎯  The 4 phases at a glance",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase",
+      "DAYS REMAINING (live)": "Date range  ·  Days  ·  Hours",
+      "TARGET STUDY HOURS": "What you do"
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 1 · Conceptual Learning",
+      "DAYS REMAINING (live)": "18 May → 07 Oct 2026  ·  143 days  ·  ~798 hrs",
+      "TARGET STUDY HOURS": "First pass: read each chapter, build notes, do basic example problems."
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 2 · Problem-Solving / Drill",
+      "DAYS REMAINING (live)": "08 Oct → 13 Nov 2026  ·  37 days  ·  ~207 hrs",
+      "TARGET STUDY HOURS": "Work through ICAI Q&A, illustrations, RTPs / MTPs from past attempts. Heavy practice on Costing & FM."
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 3 · Revision Round 1",
+      "DAYS REMAINING (live)": "14 Nov → 11 Dec 2026  ·  28 days  ·  ~156 hrs",
+      "TARGET STUDY HOURS": "Fast revision of all chapters using your own summary notes. ~3.5 hrs per chapter on average."
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 4 · Mocks + Final Revision",
+      "DAYS REMAINING (live)": "12 Dec → 08 Jan 2027  ·  28 days  ·  ~156 hrs",
+      "TARGET STUDY HOURS": "6 sectional + full-syllabus mocks, fix weak areas. Last 3 days: light revision, sleep early."
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "🧮  Time budget",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Total study days",
+      "DAYS REMAINING (live)": "236 days  (18 May 2026 → 8 Jan 2027)",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Hours per day",
+      "DAYS REMAINING (live)": "6 hrs Mon-Sat  ·  3 hrs Sun  =  39 hrs / week",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Total budgeted",
+      "DAYS REMAINING (live)": "~1,314 hours  ·  buffer ~100 hrs vs typical Group-2 need",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 1 (concepts)",
+      "DAYS REMAINING (live)": "~771 hrs over 138 days  ·  covers all 45 chapters",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 2 (problem-solving)",
+      "DAYS REMAINING (live)": "~234 hrs over 42 days  ·  ICAI past papers + RTPs",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 3 (revision 1)",
+      "DAYS REMAINING (live)": "~156 hrs over 28 days  ·  ~3.5 hrs / chapter",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Phase 4 (mocks + revise)",
+      "DAYS REMAINING (live)": "~186 hrs over 28 days  ·  12 mocks + targeted revision",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "🎨  Cell legend",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "YELLOW tint",
+      "DAYS REMAINING (live)": "You can edit this cell.",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "WHITE / grey",
+      "DAYS REMAINING (live)": "Calculated automatically. Do not type over.",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Coloured chip",
+      "DAYS REMAINING (live)": "Tags (paper code, phase, status).",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Pink highlight",
+      "DAYS REMAINING (live)": "Current item or urgent reminder.",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Red",
+      "DAYS REMAINING (live)": "Behind schedule / missed.",
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "📐  Weightage methodology",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    },
+    {
+      "EXAM DATE  (edit when ICAI announces)": "Chapter weightages in '3 · Syllabus' are derived from ICAI's official Section-wise / Skill-wise Weightages document (issued 26 October 2023, applicable for May 2024 and subsequent exams).\n\nICAI publishes weightages BY SECTION (a band like 35-40%). Each chapter has been mapped to its ICAI section, and the section's marks band is distributed across chapters in that section using past-paper question-frequency patterns. Every chapter row in the Syllabus sheet shows which ICAI section it belongs to (column 'ICAI Section') and the official band (column 'Section band').",
+      "DAYS REMAINING (live)": null,
+      "TARGET STUDY HOURS": null
+    }
+  ]
+}

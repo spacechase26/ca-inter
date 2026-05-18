@@ -1,0 +1,68 @@
+{
+  "sections": [
+    {
+      "title": "🛌  Sleep",
+      "items": [
+        "Non-negotiable: 7.5–8 hrs / night. Sacrifice study, never sleep — your brain consolidates during sleep.",
+        "No screen 1 hour before bed. Notes on paper > phone for the last 30 minutes.",
+        "Wake the same time every day (yes, including Sundays)."
+      ]
+    },
+    {
+      "title": "🍳  Food",
+      "items": [
+        "Heavy breakfast (eggs / dal / paratha) → fuels morning practical block.",
+        "Light lunch (chapati + sabzi + dahi) → no rice/sugar crash at 2 pm.",
+        "Snack between sessions: nuts, fruit. Not biscuits/Maggi.",
+        "No caffeine after 4 pm or sleep suffers."
+      ]
+    },
+    {
+      "title": "💪  Exercise",
+      "items": [
+        "20-min walk every evening, non-negotiable. Outdoors, no phone.",
+        "2× per week: 30-min strength (push-ups, squats, planks at home).",
+        "1× per week: 1-hour activity you enjoy (sport, cycling, anything)."
+      ]
+    },
+    {
+      "title": "🧠  Study-session structure",
+      "items": [
+        "Pomodoro: 50 min focus + 10 min break. Use your own Tympeak app.",
+        "After 3 pomodoros → 30-min break (real food, real walk).",
+        "Max 4 hours continuous study. Then a HARD break — eat / nap / walk.",
+        "Standing while reading Audit/SM theory = better recall."
+      ]
+    },
+    {
+      "title": "🚨  Burn-out warning signs",
+      "items": [
+        "· Can't recall what you read 5 min ago → brain is full, REST.",
+        "· Snapping at family → emotional reserves depleted, REST.",
+        "· Sleep < 7 hrs for 3 nights → recovery debt, REST.",
+        "· Mock score drops sharply → you're tired, not stupid, REST.",
+        "Burn-out protocol: 1 full day off + 7+ hrs sleep + light social time. Then back to it."
+      ]
+    },
+    {
+      "title": "🎯  Mock-day protocol",
+      "items": [
+        "1. Night before: light dinner, 8 hrs sleep, lay out everything (pen, watch, water).",
+        "2. Morning: normal breakfast, no last-min reading.",
+        "3. Sit at desk at 9:55 am sharp. Take the 3-hour mock under exam conditions: timer, no phone, no breaks.",
+        "4. After: 30-min break. Then check answers (DO NOT skip this step).",
+        "5. Same day: re-do every wrong question. Tomorrow is too late."
+      ]
+    },
+    {
+      "title": "💪  Mental model for exam day",
+      "items": [
+        "You are not trying to score 100%. You are trying to score 50%+ to pass.",
+        "In each paper: minimum 40%. Aggregate 50%+ across all 3 papers.",
+        "Solve the easy 60 marks first. Then the medium 30. Skip the hard 10 unless time permits.",
+        "When stuck, write SOMETHING. ICAI gives step-marks for method even if the final answer is wrong.",
+        "Presentation matters. Clean working notes, underlined final answers, neat handwriting in Audit/SM."
+      ]
+    }
+  ]
+}

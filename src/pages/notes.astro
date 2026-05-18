@@ -1,0 +1,110 @@
+---
+import Base from "../layouts/Base.astro";
+import { getSnapshot } from "../lib/sheets";
+
+const snap = getSnapshot("notes");
+const rows = snap.rows.filter((r) => r["Chapter"]) as unknown as Array<{
+  Chapter: string;
+  "Your formula / concept summary  (yellow = you fill)"?: string | null;
+}>;
+
+const contentKey = "Your formula / concept summary  (yellow = you fill)";
+
+// Group by paper prefix [P4·1] -> "P4"
+const byPaper = new Map<string, typeof rows>();
+for (const r of rows) {
+  const m = String(r.Chapter).match(/^\[(P\d[AB]?)/);
+  const paper = m ? m[1]! : "Other";
+  if (!byPaper.has(paper)) byPaper.set(paper, []);
+  byPaper.get(paper)!.push(r);
+}
+const order = ["P4", "P5", "P6A", "P6B"];
+const groups = order.map((p) => ({ paper: p, rows: byPaper.get(p) ?? [] })).filter((g) => g.rows.length);
+---
+<Base
+  eyebrow="Your one-page summaries"
+  title="Notes & formula recap"
+  description="After every chapter, write 3 key formulas and 3 traps. That IS your Phase 3 revision."
+>
+  <p class="hint">
+    Editing happens in the Google Sheet's "Notes" tab. The site re-fetches every 5 minutes.
+  </p>
+
+  {groups.map((g) => (
+    <section class="np">
+      <h2 class="np__paper">{g.paper}</h2>
+      <ul class="np__list">
+        {g.rows.map((r) => {
+          const content = r[contentKey] as string | null | undefined;
+          const chapter = String(r.Chapter).replace(/^\[[^\]]+\]\s*/, "");
+          return (
+            <li class={`note ${content ? "" : "note--empty"}`}>
+              <h3 class="note__title">{chapter}</h3>
+              {content ? (
+                <pre class="note__body">{content}</pre>
+              ) : (
+                <p class="note__placeholder">Not yet written. Open the Notes tab on Sheets to add yours.</p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .hint {
+    color: var(--ink-mute);
+    font-size: var(--t-meta);
+    font-family: var(--font-mono);
+    margin-bottom: var(--s-5);
+  }
+  .np {
+    margin-bottom: var(--s-7);
+  }
+  .np__paper {
+    font-size: var(--t-h4);
+    font-weight: 500;
+    margin: 0 0 var(--s-3);
+    padding-bottom: var(--s-2);
+    border-bottom: 1px solid var(--rule);
+  }
+  .np__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+  .note {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--s-4) var(--s-5);
+  }
+  .note--empty { opacity: 0.55; }
+  .note__title {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 var(--s-2);
+    font-family: var(--font-display);
+  }
+  .note__body {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    background: var(--cream);
+    padding: var(--s-3);
+    border-radius: var(--radius-sm);
+  }
+  .note__placeholder {
+    margin: 0;
+    font-size: 13px;
+    color: var(--ink-mute);
+    font-style: italic;
+  }
+</style>

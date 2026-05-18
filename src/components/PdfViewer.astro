@@ -1,0 +1,272 @@
+---
+import { resolvePdf, pdfKey } from "../lib/pdf";
+
+interface Props {
+  path: string;
+  label?: string;
+}
+const { path, label } = Astro.props;
+const src = resolvePdf(path);
+const key = pdfKey(path);
+const displayName = label ?? path.split("/").pop()?.replace(/\.pdf$/i, "") ?? path;
+---
+<div class="pdfv" data-src={src} data-key={key}>
+  <div class="pdfv__bar">
+    <div class="pdfv__nav">
+      <button class="pdfv__btn" data-act="prev" type="button" aria-label="Previous page">‹</button>
+      <span class="pdfv__pageinfo">
+        <input class="pdfv__pageinput" type="number" min="1" value="1" aria-label="Current page" />
+        <span class="pdfv__pagetotal">/ <span data-role="total">—</span></span>
+      </span>
+      <button class="pdfv__btn" data-act="next" type="button" aria-label="Next page">›</button>
+    </div>
+    <div class="pdfv__zoom">
+      <button class="pdfv__btn" data-act="zoom-out" type="button" aria-label="Zoom out">−</button>
+      <span class="pdfv__zoomlevel" data-role="zoom">100%</span>
+      <button class="pdfv__btn" data-act="zoom-in" type="button" aria-label="Zoom in">＋</button>
+    </div>
+    <div class="pdfv__status">
+      <span class="pdfv__sync" data-role="sync" aria-live="polite"></span>
+      <a class="pdfv__download" href={src} download aria-label="Download PDF">⤓</a>
+    </div>
+  </div>
+  <div class="pdfv__viewport">
+    <canvas class="pdfv__canvas" aria-label={`${displayName} PDF page`}></canvas>
+    <p class="pdfv__loading" data-role="loading">Loading PDF…</p>
+    <p class="pdfv__error" data-role="error" hidden>
+      Couldn't render this PDF in the browser.
+      <a href={src} download>Download instead →</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  import * as pdfjsLib from "pdfjs-dist";
+  import { getLastPage, setLastPage } from "../lib/sync";
+
+  // PDF.js worker — load from CDN to keep the deploy small.
+  // Version must match the installed pdfjs-dist (currently 4.x).
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.7.76/build/pdf.worker.min.mjs";
+
+  type State = {
+    pdf: any;
+    page: number;
+    zoom: number;
+    rendering: boolean;
+    nextPage: number | null;
+  };
+
+  async function init(root: HTMLElement) {
+    const src = root.dataset.src!;
+    const key = root.dataset.key!;
+    const canvas = root.querySelector("canvas.pdfv__canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d")!;
+    const loading = root.querySelector('[data-role="loading"]') as HTMLElement;
+    const error = root.querySelector('[data-role="error"]') as HTMLElement;
+    const totalEl = root.querySelector('[data-role="total"]') as HTMLElement;
+    const zoomEl = root.querySelector('[data-role="zoom"]') as HTMLElement;
+    const syncEl = root.querySelector('[data-role="sync"]') as HTMLElement;
+    const pageInput = root.querySelector(".pdfv__pageinput") as HTMLInputElement;
+
+    const state: State = { pdf: null, page: 1, zoom: 1, rendering: false, nextPage: null };
+
+    async function render() {
+      if (!state.pdf) return;
+      if (state.rendering) {
+        state.nextPage = state.page;
+        return;
+      }
+      state.rendering = true;
+      try {
+        const pdfPage = await state.pdf.getPage(state.page);
+        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        const viewport = pdfPage.getViewport({ scale: state.zoom * dpr });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.style.width = `${viewport.width / dpr}px`;
+        canvas.style.height = `${viewport.height / dpr}px`;
+        await pdfPage.render({ canvasContext: ctx, viewport }).promise;
+        pageInput.value = String(state.page);
+        zoomEl.textContent = `${Math.round(state.zoom * 100)}%`;
+      } catch (err) {
+        console.error("PDF render error", err);
+        showError();
+      } finally {
+        state.rendering = false;
+        if (state.nextPage !== null) {
+          state.page = state.nextPage;
+          state.nextPage = null;
+          render();
+        }
+      }
+    }
+
+    function goto(p: number) {
+      if (!state.pdf) return;
+      const clamped = Math.max(1, Math.min(state.pdf.numPages, Math.floor(p)));
+      if (clamped === state.page) return;
+      state.page = clamped;
+      flashSync("Saving…");
+      setLastPage(key, clamped);
+      window.setTimeout(() => flashSync("Synced ✓", 1200), 1700);
+      render();
+    }
+
+    function flashSync(text: string, fadeAfter = 0) {
+      syncEl.textContent = text;
+      if (fadeAfter) {
+        window.setTimeout(() => { syncEl.textContent = ""; }, fadeAfter);
+      }
+    }
+
+    function showError() {
+      loading.hidden = true;
+      error.hidden = false;
+    }
+
+    // Wire toolbar
+    root.querySelector('[data-act="prev"]')?.addEventListener("click", () => goto(state.page - 1));
+    root.querySelector('[data-act="next"]')?.addEventListener("click", () => goto(state.page + 1));
+    root.querySelector('[data-act="zoom-in"]')?.addEventListener("click", () => { state.zoom = Math.min(3, state.zoom + 0.2); render(); });
+    root.querySelector('[data-act="zoom-out"]')?.addEventListener("click", () => { state.zoom = Math.max(0.5, state.zoom - 0.2); render(); });
+    pageInput.addEventListener("change", () => goto(Number(pageInput.value) || 1));
+
+    // Keyboard nav when the viewer has focus
+    root.tabIndex = 0;
+    root.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); goto(state.page + 1); }
+      if (e.key === "ArrowLeft"  || e.key === "PageUp")   { e.preventDefault(); goto(state.page - 1); }
+    });
+
+    // Load the document
+    try {
+      state.pdf = await pdfjsLib.getDocument(src).promise;
+      totalEl.textContent = String(state.pdf.numPages);
+      loading.hidden = true;
+
+      const remembered = await getLastPage(key);
+      state.page = Math.min(state.pdf.numPages, Math.max(1, remembered));
+      pageInput.max = String(state.pdf.numPages);
+      await render();
+      if (remembered > 1) flashSync(`Resumed page ${remembered}`, 2000);
+    } catch (err) {
+      console.error("PDF load error", err);
+      showError();
+    }
+  }
+
+  // Hydrate every viewer on the page
+  document.querySelectorAll<HTMLElement>(".pdfv").forEach(init);
+</script>
+
+<style>
+  .pdfv {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 70vh;
+  }
+  .pdfv__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    padding: var(--s-2) var(--s-3);
+    border-bottom: 1px solid var(--rule);
+    background: var(--bg-elev);
+    flex-wrap: wrap;
+  }
+  .pdfv__nav, .pdfv__zoom, .pdfv__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .pdfv__btn {
+    background: var(--bg-card);
+    border: 1px solid var(--rule-2);
+    border-radius: var(--radius-sm);
+    padding: 4px 10px;
+    font-size: 16px;
+    line-height: 1;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .pdfv__btn:hover { background: var(--cream-2); }
+  .pdfv__pageinfo {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .pdfv__pageinput {
+    width: 56px;
+    text-align: center;
+    border: 1px solid var(--rule-2);
+    border-radius: var(--radius-sm);
+    padding: 4px 6px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--bg-card);
+  }
+  .pdfv__pagetotal { color: var(--ink-mute); }
+  .pdfv__zoomlevel {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-mute);
+    min-width: 44px;
+    text-align: center;
+  }
+  .pdfv__sync {
+    font-size: 12px;
+    color: var(--ink-mute);
+    font-family: var(--font-mono);
+  }
+  .pdfv__download {
+    text-decoration: none;
+    font-size: 16px;
+    color: var(--ink-2);
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+  }
+  .pdfv__download:hover { background: var(--cream-2); color: var(--ink); }
+
+  .pdfv__viewport {
+    flex: 1;
+    overflow: auto;
+    padding: var(--s-4);
+    background: var(--cream);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    position: relative;
+  }
+  .pdfv__canvas {
+    max-width: 100%;
+    height: auto;
+    box-shadow: var(--shadow);
+    background: white;
+    border-radius: 4px;
+  }
+  .pdfv__loading, .pdfv__error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-mute);
+    margin: 0;
+    pointer-events: none;
+  }
+  .pdfv__error { pointer-events: auto; gap: 8px; }
+
+  @media (max-width: 540px) {
+    .pdfv__bar { padding: var(--s-2); }
+    .pdfv__btn { padding: 2px 8px; font-size: 14px; }
+    .pdfv__pageinput { width: 44px; padding: 2px 4px; }
+  }
+</style>

@@ -1,0 +1,83 @@
+:root {
+  /* palette - cream/ink with paper-accent variants per ICAI paper */
+  --cream:      #F6EFE2;
+  --cream-2:    #EDE2CC;
+  --paper:      #FFFCF6;
+  --ink:        #14110D;
+  --ink-2:      #3A3128;
+  --ink-mute:   #8A7E6E;
+  --ink-soft:   #B3A695;
+  --rule:       rgba(20, 17, 13, 0.16);
+  --rule-2:     rgba(20, 17, 13, 0.28);
+  --bg-card:    #FFFCF6;
+  --bg-elev:    #FCF6E8;
+
+  /* per-paper accents */
+  --p4:         #2563EB; /* blue   - Costing */
+  --p4-soft:    #DBEAFE;
+  --p5:         #D97706; /* amber  - Audit & Ethics */
+  --p5-soft:    #FEF3C7;
+  --p6a:        #059669; /* emerald - Financial Management */
+  --p6a-soft:   #D1FAE5;
+  --p6b:        #DB2777; /* pink   - Strategic Management */
+  --p6b-soft:   #FCE7F3;
+
+  /* priority */
+  --prio-must:  #DC2626;
+  --prio-imp:   #D97706;
+  --prio-low:   #6B7280;
+
+  /* phase tints */
+  --ph1:        #6B8B72;
+  --ph2:        #C58F4A;
+  --ph3:        #8C5478;
+  --ph4:        #2A4A66;
+
+  /* status */
+  --green:      #059669;
+  --red:        #DC2626;
+
+  /* shadows */
+  --shadow-sm:  0 1px 2px rgba(20, 17, 13, 0.06);
+  --shadow:     0 2px 8px rgba(20, 17, 13, 0.08);
+  --shadow-lg:  0 8px 24px rgba(20, 17, 13, 0.10);
+
+  /* motion */
+  --ease:        cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast:    150ms;
+  --dur:         260ms;
+
+  /* spacing (4pt) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+
+  /* layout */
+  --gutter:     clamp(16px, 4vw, 32px);
+  --max-w:      1200px;
+  --radius:     10px;
+  --radius-sm:  6px;
+
+  /* type */
+  --font-display: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-body:    "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --t-meta:   12px;
+  --t-body:   15px;
+  --t-lead:   17px;
+  --t-h5:     18px;
+  --t-h4:     22px;
+  --t-h3:     28px;
+  --t-h2:     36px;
+  --t-h1:     clamp(2.2rem, 5vw, 3rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Dark mode deferred — keep cream theme for v1 */
+}

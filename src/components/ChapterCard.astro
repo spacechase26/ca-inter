@@ -1,0 +1,112 @@
+---
+import { chapterSlug } from "../lib/slug";
+
+interface Props {
+  paper: string;
+  ch: number;
+  name: string;
+  priority: string;
+  totalHrs: number;
+  weight: number;
+  done: boolean;
+  start?: string | null;
+  end?: string | null;
+}
+
+const { paper, ch, name, priority, totalHrs, weight, done, start, end } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const href = `${base}/syllabus/${chapterSlug(paper, ch, name)}`;
+
+const paperKey = paper.toLowerCase();
+const prioKey = priority.includes("Must") ? "must" : priority.includes("Important") ? "imp" : "low";
+const prioLabel = priority.replace(/^[^\w]+/, "").trim();
+const weightPct = Math.round(weight * 100);
+---
+<a class={`ch ch--${paperKey} ${done ? "ch--done" : ""}`} href={href}>
+  <div class="ch__head">
+    <span class={`chip chip--${paperKey}`}>{paper}·{ch}</span>
+    <span class={`chip chip--${prioKey}`}>{prioLabel}</span>
+  </div>
+  <h3 class="ch__title">{name}</h3>
+  <dl class="ch__meta">
+    <div><dt>Hours</dt><dd>{totalHrs}</dd></div>
+    <div><dt>Weight</dt><dd>{weightPct}%</dd></div>
+    {start && <div><dt>Start</dt><dd>{start}</dd></div>}
+    {end && <div><dt>End</dt><dd>{end}</dd></div>}
+  </dl>
+  {done && <span class="ch__done-tag">✓ done</span>}
+</a>
+
+<style>
+  .ch {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--s-4) var(--s-5);
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    overflow: hidden;
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .ch::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--rule));
+  }
+  .ch--p4  { --accent: var(--p4);  }
+  .ch--p5  { --accent: var(--p5);  }
+  .ch--p6a { --accent: var(--p6a); }
+  .ch--p6b { --accent: var(--p6b); }
+
+  .ch:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: var(--rule-2);
+  }
+
+  .ch--done { opacity: 0.6; }
+
+  .ch__head {
+    display: flex;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .ch__title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.25;
+  }
+  .ch__meta {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-2) var(--s-3);
+    margin: 0;
+    font-size: var(--t-meta);
+  }
+  .ch__meta dt {
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10px;
+  }
+  .ch__meta dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .ch__done-tag {
+    position: absolute;
+    top: var(--s-3); right: var(--s-3);
+    font-size: var(--t-meta);
+    color: var(--green);
+  }
+</style>

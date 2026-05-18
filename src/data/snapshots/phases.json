@@ -1,0 +1,49 @@
+{
+  "headers": [
+    "Phase",
+    "Start",
+    "End",
+    "Days",
+    "Plan hrs",
+    "Done hrs",
+    "What you do"
+  ],
+  "rows": [
+    {
+      "Phase": "Phase 1 · Conceptual Learning",
+      "Start": "2026-05-18",
+      "End": "2026-10-07",
+      "Days": 143,
+      "Plan hrs": 798,
+      "Done hrs": null,
+      "What you do": "First pass: read each chapter, build notes, do basic example problems."
+    },
+    {
+      "Phase": "Phase 2 · Problem-Solving / Drill",
+      "Start": "2026-10-08",
+      "End": "2026-11-13",
+      "Days": 37,
+      "Plan hrs": 207,
+      "Done hrs": null,
+      "What you do": "Work through ICAI Q&A, illustrations, RTPs / MTPs from past attempts. Heavy practice on Costing & FM."
+    },
+    {
+      "Phase": "Phase 3 · Revision Round 1",
+      "Start": "2026-11-14",
+      "End": "2026-12-11",
+      "Days": 28,
+      "Plan hrs": 156,
+      "Done hrs": null,
+      "What you do": "Fast revision of all chapters using your own summary notes. ~3.5 hrs per chapter on average."
+    },
+    {
+      "Phase": "Phase 4 · Mocks + Final Revision",
+      "Start": "2026-12-12",
+      "End": "2027-01-08",
+      "Days": 28,
+      "Plan hrs": 156,
+      "Done hrs": null,
+      "What you do": "6 sectional + full-syllabus mocks, fix weak areas. Last 3 days: light revision, sleep early."
+    }
+  ]
+}

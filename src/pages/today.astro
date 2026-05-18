@@ -1,0 +1,78 @@
+---
+import Base from "../layouts/Base.astro";
+import DailyRow from "../components/DailyRow.astro";
+import { getSnapshot } from "../lib/sheets";
+import { todayIso, formatPretty } from "../lib/today";
+import type { DailyRow as DailyRowT } from "../types/sheet";
+
+const snap = getSnapshot("daily");
+const rows = snap.rows.filter((r) => r["Date"]) as unknown as DailyRowT[];
+
+const today = todayIso();
+
+// Build-time best guess: use the first row >= today, fallback to first row.
+let initialIdx = rows.findIndex((r) => String(r.Date) >= today);
+if (initialIdx === -1) initialIdx = rows.length - 1;
+const initial = rows[Math.max(0, initialIdx)];
+const planRangeStart = rows[0]?.Date;
+const planRangeEnd = rows[rows.length - 1]?.Date;
+---
+<Base
+  eyebrow="Today"
+  title="Today's plan"
+  description={`Pulled from your Daily Plan tab. Plan runs ${formatPretty(planRangeStart!)} → ${formatPretty(planRangeEnd!)}.`}
+>
+  <p class="hint" id="today-hint">Showing: <strong id="today-pretty">{formatPretty(initial?.Date ?? today)}</strong></p>
+
+  <div id="today-row">
+    {initial && (
+      <DailyRow
+        n={initial["#"]}
+        date={initial.Date}
+        day={initial.Day}
+        phase={initial.Phase}
+        practical={initial["Practical block"]}
+        theory={initial["Theory block"]}
+        revisit={initial["Revisit (20-30m)"]}
+        planHrs={initial["Plan hrs"]}
+        actualHrs={initial["Actual hrs"]}
+        done={initial["Done?"]}
+        confidence={initial.Confidence}
+        notes={initial.Notes}
+        highlight="today"
+      />
+    )}
+  </div>
+
+  <p class="footnote">
+    Edits to today's row happen in the Google Sheets app. The site re-fetches every 5 minutes (or when you tap Refresh).
+  </p>
+
+  <script type="module" define:vars={{ today, basePath: import.meta.env.BASE_URL }}>
+    // Best-effort: highlight today's actual row based on browser local date.
+    // Falls back gracefully if the date isn't in the dataset.
+    const card = document.querySelector("#today-row .daily");
+    if (card && card.dataset.date !== today) {
+      const prettyEl = document.getElementById("today-pretty");
+      if (prettyEl) {
+        prettyEl.textContent = "Showing nearest scheduled day. Click ‘Daily’ for full list.";
+      }
+    }
+  </script>
+</Base>
+
+<style>
+  .hint {
+    color: var(--ink-mute);
+    font-size: var(--t-meta);
+    font-family: var(--font-mono);
+    margin-bottom: var(--s-4);
+  }
+  .hint strong { color: var(--ink); font-weight: 500; }
+  .footnote {
+    margin-top: var(--s-5);
+    color: var(--ink-mute);
+    font-size: var(--t-meta);
+    max-width: 540px;
+  }
+</style>

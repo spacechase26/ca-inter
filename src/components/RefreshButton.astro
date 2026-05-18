@@ -1,0 +1,45 @@
+---
+// Client-only refresh button: clears the CSV localStorage cache and reloads.
+---
+<button class="refresh" id="refresh-btn" type="button" aria-label="Refresh data from Google Sheet">
+  <span class="refresh__icon" aria-hidden="true">↻</span>
+  <span class="refresh__text">Refresh</span>
+</button>
+
+<script>
+  const CACHE_PREFIX = "ca-inter:cache:";
+  const btn = document.getElementById("refresh-btn");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      try {
+        const toRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith(CACHE_PREFIX)) toRemove.push(k);
+        }
+        toRemove.forEach((k) => localStorage.removeItem(k));
+      } catch {
+        /* ignore */
+      }
+      btn.classList.add("refresh--spin");
+      setTimeout(() => location.reload(), 250);
+    });
+  }
+</script>
+
+<style>
+  .refresh {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--rule-2);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .refresh:hover { border-color: var(--ink); color: var(--ink); }
+  .refresh__icon { font-size: 14px; transition: transform 600ms var(--ease); display: inline-block; }
+  .refresh--spin .refresh__icon { transform: rotate(360deg); }
+</style>

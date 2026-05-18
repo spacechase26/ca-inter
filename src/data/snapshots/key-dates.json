@@ -1,0 +1,124 @@
+{
+  "headers": [
+    "Date",
+    "Event",
+    "Why it matters",
+    "Type"
+  ],
+  "rows": [
+    {
+      "Date": "2026-03-03",
+      "Event": "Inter Registration paid (₹18,000)",
+      "Why it matters": "8-month study period starts now. Earliest exam: Jan 2027.",
+      "Type": "Past"
+    },
+    {
+      "Date": "2026-09-01",
+      "Event": "Watch for ICAI exam-form notification",
+      "Why it matters": "Exam application form for Jan 2027 usually opens late Aug / early Sep. Check icai.org and SSP portal weekly.",
+      "Type": "Action"
+    },
+    {
+      "Date": "2026-10-31",
+      "Event": "Exam form deadline (estimate)",
+      "Why it matters": "Typically closes ~10 weeks before exam. Submit BEFORE the last week to avoid SSP portal congestion. Pay exam fee (~₹2,700 for Group 2).",
+      "Type": "Critical"
+    },
+    {
+      "Date": "2026-11-03",
+      "Event": "8-month study period completes",
+      "Why it matters": "You become eligible to write the Inter exam from this date.",
+      "Type": "Milestone"
+    },
+    {
+      "Date": "2026-12-25",
+      "Event": "Admit card download window opens",
+      "Why it matters": "Download from icaiexam.icai.org. Print 2 copies.",
+      "Type": "Action"
+    },
+    {
+      "Date": "2027-01-04",
+      "Event": "Last week of revision begins",
+      "Why it matters": "No new chapters. Only revision + 1 full mock + sleep 8 hrs.",
+      "Type": "Milestone"
+    },
+    {
+      "Date": "2027-01-10",
+      "Event": "Group 2 · Paper 4 (Cost & Mgmt Accounting) — tentative",
+      "Why it matters": "Actual date confirmed when ICAI publishes the exam timetable.",
+      "Type": "Exam"
+    },
+    {
+      "Date": "2027-01-12",
+      "Event": "Group 2 · Paper 5 (Auditing & Ethics) — tentative",
+      "Why it matters": null,
+      "Type": "Exam"
+    },
+    {
+      "Date": "2027-01-14",
+      "Event": "Group 2 · Paper 6 (FM & SM) — tentative",
+      "Why it matters": null,
+      "Type": "Exam"
+    },
+    {
+      "Date": "2027-03-05",
+      "Event": "Result expected (~7 weeks after exam)",
+      "Why it matters": "icaiexam.icai.org",
+      "Type": "Milestone"
+    },
+    {
+      "Date": "🏖  Recommended full rest days (one every 4 weeks)",
+      "Event": null,
+      "Why it matters": null,
+      "Type": null
+    },
+    {
+      "Date": "2026-06-21",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    },
+    {
+      "Date": "2026-07-19",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    },
+    {
+      "Date": "2026-08-16",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    },
+    {
+      "Date": "2026-09-13",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    },
+    {
+      "Date": "2026-10-11",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    },
+    {
+      "Date": "2026-11-08",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    },
+    {
+      "Date": "2026-12-06",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    },
+    {
+      "Date": "2027-01-03",
+      "Event": "Full rest day — no study",
+      "Why it matters": "Sleep in, eat well, exercise, see family. Your brain consolidates while you rest.",
+      "Type": "Rest"
+    }
+  ]
+}

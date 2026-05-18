@@ -1,0 +1,176 @@
+---
+import { formatPretty } from "../lib/today";
+
+interface Props {
+  n: number;
+  date: string;
+  day: string;
+  phase: string;
+  practical?: string | null;
+  theory?: string | null;
+  revisit?: string | null;
+  planHrs: number;
+  actualHrs?: number | null;
+  done: boolean;
+  confidence?: number | null;
+  notes?: string | null;
+  highlight?: "today" | "past" | "future";
+}
+
+const { n, date, day, phase, practical, theory, revisit, planHrs, actualHrs, done, confidence, notes, highlight } = Astro.props;
+const phaseClass = `daily--${phase.toLowerCase()}`;
+const stateClass = highlight ? `daily--${highlight}` : "";
+const pretty = formatPretty(date);
+---
+<article class={`daily ${phaseClass} ${stateClass} ${done ? "daily--done" : ""}`} data-date={date} id={`d-${date}`}>
+  <header class="daily__head">
+    <span class="daily__n">Day {n}</span>
+    <time class="daily__date" datetime={date}>{pretty}</time>
+    <span class={`chip daily__phase`}>{phase}</span>
+    {done && <span class="daily__done">✓ done</span>}
+  </header>
+  <div class="daily__body">
+    {practical && (
+      <div class="daily__block">
+        <span class="daily__label">Practical</span>
+        <p class="daily__text">{practical}</p>
+      </div>
+    )}
+    {theory && (
+      <div class="daily__block">
+        <span class="daily__label">Theory</span>
+        <p class="daily__text">{theory}</p>
+      </div>
+    )}
+    {revisit && (
+      <div class="daily__block daily__block--revisit">
+        <span class="daily__label">Revisit</span>
+        <p class="daily__text">{revisit}</p>
+      </div>
+    )}
+  </div>
+  <footer class="daily__foot">
+    <span class="daily__metric">
+      <span class="daily__metric-label">Plan</span>
+      <span class="daily__metric-value">{planHrs}h</span>
+    </span>
+    {actualHrs != null && (
+      <span class="daily__metric">
+        <span class="daily__metric-label">Actual</span>
+        <span class="daily__metric-value">{actualHrs}h</span>
+      </span>
+    )}
+    {confidence != null && (
+      <span class="daily__metric">
+        <span class="daily__metric-label">Conf.</span>
+        <span class="daily__metric-value">{confidence}/5</span>
+      </span>
+    )}
+    {notes && <span class="daily__note">📝 {notes}</span>}
+  </footer>
+</article>
+
+<style>
+  .daily {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--s-4) var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+    position: relative;
+    border-left: 4px solid var(--accent, var(--rule));
+  }
+  .daily--p1 { --accent: var(--ph1); }
+  .daily--p2 { --accent: var(--ph2); }
+  .daily--p3 { --accent: var(--ph3); }
+  .daily--p4 { --accent: var(--ph4); }
+
+  .daily--today {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink) inset, var(--shadow);
+  }
+  .daily--past { opacity: 0.6; }
+  .daily--done { background: var(--bg-elev); }
+
+  .daily__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+  }
+  .daily__n {
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
+    color: var(--ink-mute);
+  }
+  .daily__date {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .daily__phase {
+    background: var(--accent);
+    color: white;
+  }
+  .daily__done {
+    margin-left: auto;
+    color: var(--green);
+    font-size: var(--t-meta);
+  }
+
+  .daily__body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--s-3);
+  }
+  .daily__block {
+    padding: var(--s-2) var(--s-3);
+    background: var(--cream);
+    border-radius: var(--radius-sm);
+  }
+  .daily__block--revisit {
+    background: #FFF4E5;
+  }
+  .daily__label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-mute);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .daily__text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .daily__foot {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+    font-size: var(--t-meta);
+  }
+  .daily__metric {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .daily__metric-label {
+    color: var(--ink-mute);
+    font-family: var(--font-mono);
+  }
+  .daily__metric-value {
+    font-family: var(--font-mono);
+    color: var(--ink);
+  }
+  .daily__note {
+    color: var(--ink-2);
+    margin-left: auto;
+  }
+</style>

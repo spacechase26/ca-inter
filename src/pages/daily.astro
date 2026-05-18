@@ -1,0 +1,125 @@
+---
+import Base from "../layouts/Base.astro";
+import DailyRow from "../components/DailyRow.astro";
+import { getSnapshot } from "../lib/sheets";
+import { todayIso, formatPretty } from "../lib/today";
+import type { DailyRow as DailyRowT } from "../types/sheet";
+
+const snap = getSnapshot("daily");
+const rows = snap.rows.filter((r) => r["Date"]) as unknown as DailyRowT[];
+
+const today = todayIso();
+
+const planRangeStart = rows[0]?.Date;
+const planRangeEnd = rows[rows.length - 1]?.Date;
+---
+<Base
+  eyebrow="Daily plan"
+  title="All 236 days"
+  description={`${formatPretty(planRangeStart!)} → ${formatPretty(planRangeEnd!)}. Scrolls to today on load. Filter by phase below.`}
+>
+  <div class="toolbar">
+    <div class="filters" role="group" aria-label="Filter by phase">
+      <button data-phase="" class="filter filter--active" type="button">All</button>
+      <button data-phase="P1" class="filter" type="button">P1 · Learn</button>
+      <button data-phase="P2" class="filter" type="button">P2 · Drill</button>
+      <button data-phase="P3" class="filter" type="button">P3 · Revise</button>
+      <button data-phase="P4" class="filter" type="button">P4 · Mocks</button>
+    </div>
+    <button id="jump-today" type="button" class="jump">Jump to today</button>
+  </div>
+
+  <div class="rows" id="daily-rows">
+    {rows.map((r) => (
+      <DailyRow
+        n={r["#"]}
+        date={r.Date}
+        day={r.Day}
+        phase={r.Phase}
+        practical={r["Practical block"]}
+        theory={r["Theory block"]}
+        revisit={r["Revisit (20-30m)"]}
+        planHrs={r["Plan hrs"]}
+        actualHrs={r["Actual hrs"]}
+        done={r["Done?"]}
+        confidence={r.Confidence}
+        notes={r.Notes}
+        highlight={r.Date === today ? "today" : (r.Date < today ? "past" : "future")}
+      />
+    ))}
+  </div>
+
+  <script type="module" define:vars={{ today }}>
+    // Filter by phase
+    const buttons = document.querySelectorAll(".filter");
+    const rowsContainer = document.getElementById("daily-rows");
+    buttons.forEach((b) => {
+      b.addEventListener("click", () => {
+        const phase = b.dataset.phase || "";
+        buttons.forEach((x) => x.classList.toggle("filter--active", x === b));
+        rowsContainer.querySelectorAll(".daily").forEach((row) => {
+          const rowPhase = Array.from(row.classList).find((c) => c.startsWith("daily--p"))?.slice(7).toUpperCase() ?? "";
+          row.style.display = (!phase || rowPhase === phase.toLowerCase().toUpperCase() || rowPhase === phase) ? "" : "none";
+        });
+      });
+    });
+
+    // Auto-scroll to today (or nearest future row)
+    const target = document.getElementById(`d-${today}`)
+      ?? Array.from(rowsContainer.querySelectorAll(".daily")).find((r) => r.dataset.date >= today);
+    if (target) {
+      target.scrollIntoView({ behavior: "instant", block: "center" });
+    }
+
+    document.getElementById("jump-today")?.addEventListener("click", () => {
+      const t = document.getElementById(`d-${today}`)
+        ?? Array.from(rowsContainer.querySelectorAll(".daily")).find((r) => r.dataset.date >= today);
+      if (t) t.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  </script>
+</Base>
+
+<style>
+  .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-bottom: var(--s-5);
+    padding: var(--s-3);
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    position: sticky;
+    top: 64px;
+    z-index: 5;
+    backdrop-filter: blur(8px);
+  }
+  .filters { display: flex; gap: var(--s-1); flex-wrap: wrap; }
+  .filter {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-2);
+    background: transparent;
+  }
+  .filter--active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .jump {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+  @media (max-width: 640px) {
+    .toolbar { top: 116px; }
+  }
+</style>

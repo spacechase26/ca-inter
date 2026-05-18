@@ -1,0 +1,121 @@
+---
+import Base from "../layouts/Base.astro";
+import { getSnapshot } from "../lib/sheets";
+import { formatPretty, todayIso } from "../lib/today";
+import type { Mock } from "../types/sheet";
+
+const snap = getSnapshot("mocks");
+const mocks = snap.rows.filter((r) => r["#"]) as unknown as Mock[];
+const today = todayIso();
+
+const done = mocks.filter((m) => m["Done date"] && m["Marks scored"] != null);
+const avgPct = done.length
+  ? Math.round(
+      (done.reduce((a, m) => a + (Number(m["Marks scored"]) / Number(m["Out of"])) * 100, 0) / done.length) * 10
+    ) / 10
+  : null;
+---
+<Base
+  eyebrow="Mocks · 12 scheduled"
+  title="Practice exams"
+  description="6 sectional + 4 full + 2 ICAI MTPs. Score progression below — target 60%+ aggregate by Mock 10."
+>
+  {avgPct !== null && (
+    <p class="summary">Average score so far: <strong>{avgPct}%</strong> across {done.length} mock{done.length === 1 ? "" : "s"}.</p>
+  )}
+
+  <ol class="mocks">
+    {mocks.map((m) => {
+      const isPast = String(m["Planned date"]) < today;
+      const isDone = !!m["Done date"] && m["Marks scored"] != null;
+      const pct = isDone ? Math.round((Number(m["Marks scored"]) / Number(m["Out of"])) * 100) : null;
+      const status = isDone ? "done" : isPast ? "missed" : "upcoming";
+      return (
+        <li class={`mock mock--${status}`}>
+          <div class="mock__head">
+            <span class="mock__n">#{m["#"]}</span>
+            <span class="chip mock__type">{m.Type}</span>
+            <time class="mock__date" datetime={String(m["Planned date"])}>
+              {formatPretty(String(m["Planned date"]))}
+            </time>
+            <span class={`mock__status mock__status--${status}`}>
+              {status === "done" ? `✓ ${pct}%` : status === "missed" ? "missed" : "upcoming"}
+            </span>
+          </div>
+          <p class="mock__scope">{m.Scope}</p>
+          {isDone && (
+            <p class="mock__detail">
+              Scored {m["Marks scored"]} / {m["Out of"]} on {formatPretty(String(m["Done date"]))}
+            </p>
+          )}
+          {m["Weak areas to revisit"] && (
+            <p class="mock__weak">⚠ Weak: {m["Weak areas to revisit"]}</p>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</Base>
+
+<style>
+  .summary {
+    font-size: var(--t-lead);
+    margin-bottom: var(--s-5);
+    color: var(--ink-2);
+  }
+  .summary strong { color: var(--ink); font-weight: 500; }
+
+  .mocks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+  .mock {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--accent, var(--ink-mute));
+    border-radius: var(--radius);
+    padding: var(--s-4) var(--s-5);
+  }
+  .mock--upcoming { --accent: var(--ph2); }
+  .mock--done     { --accent: var(--green); }
+  .mock--missed   { --accent: var(--red); opacity: 0.7; }
+
+  .mock__head {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--s-2);
+  }
+  .mock__n { font-family: var(--font-mono); color: var(--ink-mute); font-size: var(--t-meta); }
+  .mock__type { background: var(--cream-2); color: var(--ink-2); }
+  .mock__date {
+    font-family: var(--font-display);
+    font-size: 16px;
+  }
+  .mock__status {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .mock__status--done    { color: var(--green); }
+  .mock__status--missed  { color: var(--red); }
+  .mock__status--upcoming { color: var(--ink-mute); }
+
+  .mock__scope { margin: 0 0 4px; font-size: 15px; line-height: 1.35; }
+  .mock__detail { margin: 0; font-size: var(--t-meta); color: var(--ink-mute); font-family: var(--font-mono); }
+  .mock__weak {
+    margin: var(--s-2) 0 0;
+    padding: 6px 10px;
+    background: #FEF3C7;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: #92400E;
+  }
+</style>

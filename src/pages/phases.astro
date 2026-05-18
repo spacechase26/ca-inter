@@ -1,0 +1,124 @@
+---
+import Base from "../layouts/Base.astro";
+import { getSnapshot } from "../lib/sheets";
+import { formatPretty, todayIso } from "../lib/today";
+import type { Phase } from "../types/sheet";
+
+const snap = getSnapshot("phases");
+const phases = snap.rows.filter((r) => r["Phase"]) as unknown as Phase[];
+const today = todayIso();
+
+type PhaseView = Phase & { num: number; status: "current" | "past" | "future"; };
+const phaseViews: PhaseView[] = phases.map((p, i) => {
+  const start = String(p.Start);
+  const end = String(p.End);
+  let status: PhaseView["status"] = "future";
+  if (today.localeCompare(start) >= 0 && today.localeCompare(end) <= 0) status = "current";
+  else if (today.localeCompare(end) > 0) status = "past";
+  return { ...p, num: i + 1, status };
+});
+---
+<Base
+  eyebrow="Macro structure"
+  title="The four phases"
+  description="From first-read to mock-finale. Each phase has a different goal and a different rhythm."
+>
+  <ol class="phases">
+    {phaseViews.map((p) => (
+        <li class={`ph ph--p${p.num} ph--${p.status}`}>
+          <header class="ph__head">
+            <span class="ph__num">Phase {p.num}</span>
+            <span class={`ph__badge ph__badge--${p.status}`}>
+              {p.status === "current" ? "● Now" : p.status === "past" ? "Completed" : "Upcoming"}
+            </span>
+          </header>
+          <h2 class="ph__name">{p.Phase.split("·").slice(1).join("·").trim() || p.Phase}</h2>
+          <p class="ph__what">{p["What you do"]}</p>
+          <dl class="ph__stats">
+            <div><dt>Starts</dt><dd>{formatPretty(p.Start)}</dd></div>
+            <div><dt>Ends</dt><dd>{formatPretty(p.End)}</dd></div>
+            <div><dt>Days</dt><dd>{p.Days}</dd></div>
+            <div><dt>Plan hrs</dt><dd>{p["Plan hrs"]}</dd></div>
+          </dl>
+        </li>
+    ))}
+  </ol>
+</Base>
+
+<style>
+  .phases {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--s-4);
+  }
+  .ph {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--s-5) var(--s-6);
+    border-top: 4px solid var(--accent, var(--ink-mute));
+  }
+  .ph--p1 { --accent: var(--ph1); }
+  .ph--p2 { --accent: var(--ph2); }
+  .ph--p3 { --accent: var(--ph3); }
+  .ph--p4 { --accent: var(--ph4); }
+
+  .ph--past { opacity: 0.6; }
+  .ph--current { box-shadow: 0 0 0 1px var(--ink) inset; }
+
+  .ph__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--s-2);
+  }
+  .ph__num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .ph__badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--cream-2);
+    color: var(--ink-2);
+  }
+  .ph__badge--current { background: var(--ink); color: var(--cream); }
+  .ph__badge--past    { background: var(--p6a-soft); color: var(--p6a); }
+
+  .ph__name {
+    font-size: var(--t-h3);
+    font-weight: 500;
+    margin: 0 0 var(--s-3);
+  }
+  .ph__what {
+    color: var(--ink-2);
+    margin: 0 0 var(--s-4);
+    max-width: 60ch;
+  }
+  .ph__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--s-3);
+    margin: 0;
+  }
+  .ph__stats dt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    letter-spacing: 0.06em;
+  }
+  .ph__stats dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+  }
+</style>

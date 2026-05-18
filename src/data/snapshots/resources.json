@@ -1,0 +1,130 @@
+{
+  "headers": [
+    "Category",
+    "Name",
+    "Link",
+    "Notes"
+  ],
+  "rows": [
+    {
+      "Category": "Official",
+      "Name": "ICAI Section-wise / Skill-wise Weightages (PDF)",
+      "Link": "https://resource.cdn.icai.org/76830bos61899-inter.pdf",
+      "Notes": "Authoritative source for chapter weightages used in this planner. Issued 26 Oct 2023."
+    },
+    {
+      "Category": "Official",
+      "Name": "ICAI Board of Studies Live Portal",
+      "Link": "https://boslive.icai.org",
+      "Notes": "Primary source for study material, RTPs, MTPs, suggested answers."
+    },
+    {
+      "Category": "Official",
+      "Name": "ICAI Self Service Portal (SSP)",
+      "Link": "https://eservices.icai.org",
+      "Notes": "Login portal — registration, exam form, admit card."
+    },
+    {
+      "Category": "Official",
+      "Name": "ICAI Exam Portal",
+      "Link": "https://icaiexam.icai.org",
+      "Notes": "Exam form, admit card, results."
+    },
+    {
+      "Category": "Official",
+      "Name": "CA Intermediate NSET page",
+      "Link": "https://www.icai.org/post/intermediate-nset",
+      "Notes": "New scheme syllabus & resources hub."
+    },
+    {
+      "Category": "Official",
+      "Name": "Mock Test Papers (Group 2 — last released)",
+      "Link": "https://resource.cdn.icai.org/84776bos68244-gp2.pdf",
+      "Notes": "PDF of recent BoS MTP for Group 2."
+    },
+    {
+      "Category": "Official",
+      "Name": "ICAI BoS Knowledge Portal — Announcements",
+      "Link": "https://www.icai.org/category/announcements?type=BOS",
+      "Notes": "Where new MTPs/RTPs are announced."
+    },
+    {
+      "Category": "Official",
+      "Name": "ICAI Suggested Answers archive",
+      "Link": "https://www.icai.org/post/suggested-answers",
+      "Notes": "Past-attempt answer keys — essential for self-evaluation."
+    },
+    {
+      "Category": "Paper 4 · Costing",
+      "Name": "CA Bhanwar Borana (BB Sir) — Costing playlist",
+      "Link": "https://www.youtube.com/@bhanwarboranaaca",
+      "Notes": "Most-recommended free Costing channel."
+    },
+    {
+      "Category": "Paper 4 · Costing",
+      "Name": "CA Sankalp Kanstiya — Costing fast-track",
+      "Link": "https://www.youtube.com/@CASankalpKanstiya",
+      "Notes": "Quick revision videos."
+    },
+    {
+      "Category": "Paper 4 · Costing",
+      "Name": "Unacademy CA Costing free chapters",
+      "Link": "https://unacademy.com/goal/ca-intermediate-may-2024-group-2/PXNZK",
+      "Notes": "Free intro lectures."
+    },
+    {
+      "Category": "Paper 5 · Audit",
+      "Name": "CA Khushboo Sanghavi — Audit",
+      "Link": "https://www.youtube.com/@CAKhushboosanghavi",
+      "Notes": "Highly-rated for Audit."
+    },
+    {
+      "Category": "Paper 5 · Audit",
+      "Name": "CA Aarti Lahoti — Audit fast revision",
+      "Link": "https://www.youtube.com/@CAAartiLahoti",
+      "Notes": "Concise revision videos."
+    },
+    {
+      "Category": "Paper 5 · Audit",
+      "Name": "ICAI BoS Live Sessions",
+      "Link": "https://boslive.icai.org",
+      "Notes": "Free official live revision sessions."
+    },
+    {
+      "Category": "Paper 6A · FM",
+      "Name": "CA Aaditya Jain — FM",
+      "Link": "https://www.youtube.com/@caaadityajain",
+      "Notes": "Comprehensive FM concepts."
+    },
+    {
+      "Category": "Paper 6A · FM",
+      "Name": "CA Nitin Goel — FM",
+      "Link": "https://www.youtube.com/@nitingoelclasses",
+      "Notes": "Practical question-solving."
+    },
+    {
+      "Category": "Paper 6B · SM",
+      "Name": "CA Sanjay Saraf — SM",
+      "Link": "https://www.youtube.com/@SanjaySarafEducationalInstitute",
+      "Notes": "SM theory + cases."
+    },
+    {
+      "Category": "Paper 6B · SM",
+      "Name": "Pratik Jagati / Aakash Kandoi — SM",
+      "Link": "https://www.youtube.com/results?search_query=ca+inter+sm+pratik+jagati",
+      "Notes": "Search for the latest videos."
+    },
+    {
+      "Category": "Community",
+      "Name": "r/CharteredAccountants",
+      "Link": "https://www.reddit.com/r/CharteredAccountants",
+      "Notes": "Peer support, doubt-solving, exam updates."
+    },
+    {
+      "Category": "Community",
+      "Name": "CA Club India forum",
+      "Link": "https://www.caclubindia.com",
+      "Notes": "India-specific CA student community."
+    }
+  ]
+}

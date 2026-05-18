@@ -1,0 +1,147 @@
+{
+  "headers": [
+    "#",
+    "Planned date",
+    "Done date",
+    "Type",
+    "Scope",
+    "Marks scored",
+    "Out of",
+    "% Score",
+    "Weak areas to revisit"
+  ],
+  "rows": [
+    {
+      "#": 1,
+      "Planned date": "2026-11-01",
+      "Done date": null,
+      "Type": "Sectional",
+      "Scope": "Sectional 1 · Costing (Ch 1-8) — Costing chapters 1-8",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 2,
+      "Planned date": "2026-11-08",
+      "Done date": null,
+      "Type": "Sectional",
+      "Scope": "Sectional 2 · Costing (Ch 9-15) — Costing chapters 9-15",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 3,
+      "Planned date": "2026-11-13",
+      "Done date": null,
+      "Type": "Sectional",
+      "Scope": "Sectional 3 · Audit (Ch 1-6) — Audit chapters 1-6",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 4,
+      "Planned date": "2026-12-06",
+      "Done date": null,
+      "Type": "Sectional",
+      "Scope": "Sectional 4 · Audit (Ch 7-11) — Audit chapters 7-11",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 5,
+      "Planned date": "2026-12-11",
+      "Done date": null,
+      "Type": "Sectional",
+      "Scope": "Sectional 5 · FM (all) — FM chapters 1-14",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 6,
+      "Planned date": "2026-12-13",
+      "Done date": null,
+      "Type": "Sectional",
+      "Scope": "Sectional 6 · SM (all) — SM chapters 1-5",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 7,
+      "Planned date": "2026-12-17",
+      "Done date": null,
+      "Type": "Full",
+      "Scope": "Full Mock 1 · Group 2 (P4+P5+P6) — All Group 2 papers, exam conditions",
+      "Marks scored": null,
+      "Out of": 300,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 8,
+      "Planned date": "2026-12-22",
+      "Done date": null,
+      "Type": "Full",
+      "Scope": "Full Mock 2 · Group 2 (P4+P5+P6) — All Group 2 papers",
+      "Marks scored": null,
+      "Out of": 300,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 9,
+      "Planned date": "2026-12-27",
+      "Done date": null,
+      "Type": "ICAI MTP",
+      "Scope": "ICAI MTP Series I (released by BoS) — Whatever ICAI BoS releases",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 10,
+      "Planned date": "2026-12-31",
+      "Done date": null,
+      "Type": "Full",
+      "Scope": "Full Mock 3 · Group 2 (P4+P5+P6) — All Group 2 papers",
+      "Marks scored": null,
+      "Out of": 300,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 11,
+      "Planned date": "2027-01-03",
+      "Done date": null,
+      "Type": "ICAI MTP",
+      "Scope": "ICAI MTP Series II (released by BoS) — Whatever ICAI BoS releases",
+      "Marks scored": null,
+      "Out of": 100,
+      "% Score": null,
+      "Weak areas to revisit": null
+    },
+    {
+      "#": 12,
+      "Planned date": "2027-01-06",
+      "Done date": null,
+      "Type": "Full",
+      "Scope": "Full Mock 4 · Group 2 (final dry-run) — All Group 2 papers",
+      "Marks scored": null,
+      "Out of": 300,
+      "% Score": null,
+      "Weak areas to revisit": null
+    }
+  ]
+}

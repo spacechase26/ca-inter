@@ -1,22 +1,214 @@
 ---
-const base = import.meta.env.BASE_URL;
+import Base from "../layouts/Base.astro";
+import KpiCard from "../components/KpiCard.astro";
+import DailyRow from "../components/DailyRow.astro";
+import { getSnapshot } from "../lib/sheets";
+import { todayIso, formatPretty, daysBetween, isoToDate } from "../lib/today";
+import type { Chapter, DailyRow as DailyRowT, Phase, Mock } from "../types/sheet";
+
+const today = todayIso();
+
+const dailyRows = getSnapshot("daily").rows.filter((r) => r["Date"]) as unknown as DailyRowT[];
+const chapters = getSnapshot("syllabus").rows.filter((r) => r["Paper"]) as unknown as Chapter[];
+const phases = getSnapshot("phases").rows.filter((r) => r["Phase"]) as unknown as Phase[];
+const mocks = getSnapshot("mocks").rows.filter((r) => r["#"]) as unknown as Mock[];
+
+// Compute aggregates from snapshot (browser will re-compute from live data on refresh)
+const totalPlanHrs = dailyRows.reduce((a, r) => a + (r["Plan hrs"] || 0), 0);
+const totalActualHrs = dailyRows.reduce((a, r) => a + (r["Actual hrs"] || 0), 0);
+const completionPct = chapters.length
+  ? Math.round((chapters.filter((c) => c["Done?"]).length / chapters.length) * 100)
+  : 0;
+
+const planStart = dailyRows[0]?.Date ?? today;
+const planEnd = dailyRows[dailyRows.length - 1]?.Date ?? today;
+const daysTotal = daysBetween(planStart, planEnd) + 1;
+const daysElapsed = Math.max(0, Math.min(daysTotal, daysBetween(planStart, today) + 1));
+const daysRemaining = Math.max(0, daysTotal - daysElapsed);
+
+// Find current phase by today's date
+const currentPhase = phases.find((p) => today >= String(p.Start) && today <= String(p.End)) ?? phases[0];
+
+// Today's row + this-week strip
+let todayIdx = dailyRows.findIndex((r) => String(r.Date) >= today);
+if (todayIdx === -1) todayIdx = dailyRows.length - 1;
+const todayRow = dailyRows[Math.max(0, todayIdx)];
+const weekRows = dailyRows.slice(Math.max(0, todayIdx), todayIdx + 7);
+
+// Next mock
+const upcomingMocks = mocks
+  .filter((m) => String(m["Planned date"]) >= today)
+  .sort((a, b) => String(a["Planned date"]).localeCompare(String(b["Planned date"])));
+const nextMock = upcomingMocks[0];
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CA Inter G2 · Companion</title>
-    <style>
-      body { font-family: system-ui, -apple-system, sans-serif; max-width: 640px; margin: 80px auto; padding: 0 24px; color: #14110D; line-height: 1.55; }
-      h1 { font-size: 28px; margin-bottom: 8px; }
-      .sub { color: #8A7E6E; font-size: 14px; }
-      code { background: #F6EFE2; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
-    </style>
-  </head>
-  <body>
-    <h1>CA Inter · Group 2 · Companion site</h1>
-    <p class="sub">Scaffold deployed. Base path: <code>{base}</code></p>
-    <p>Next phase: data layer.</p>
-  </body>
-</html>
+<Base
+  eyebrow="Companion · live from your Sheet"
+  title="Dashboard"
+  description="One glance: where you are in the plan, what's next, and whether you're on pace."
+>
+  <section class="kpis">
+    <KpiCard label="Days in plan" value={daysTotal} hint={`${daysElapsed} elapsed · ${daysRemaining} to go`} />
+    <KpiCard label="Plan hours" value={totalPlanHrs} suffix="h" hint={`Actual logged: ${Math.round(totalActualHrs)}h`} />
+    <KpiCard label="Chapters done" value={`${completionPct}%`} hint={`${chapters.filter((c) => c["Done?"]).length} / ${chapters.length}`} />
+    <KpiCard
+      label="Current phase"
+      value={currentPhase?.Phase?.split("·")[0]?.trim() ?? "—"}
+      hint={currentPhase ? `${formatPretty(currentPhase.Start)} → ${formatPretty(currentPhase.End)}` : ""}
+    />
+  </section>
+
+  <section class="card-pair">
+    <article class="block">
+      <header class="block__head">
+        <h2>Today</h2>
+        <a href={`${import.meta.env.BASE_URL}/today`}>Open →</a>
+      </header>
+      {todayRow ? (
+        <DailyRow
+          n={todayRow["#"]}
+          date={todayRow.Date}
+          day={todayRow.Day}
+          phase={todayRow.Phase}
+          practical={todayRow["Practical block"]}
+          theory={todayRow["Theory block"]}
+          revisit={todayRow["Revisit (20-30m)"]}
+          planHrs={todayRow["Plan hrs"]}
+          actualHrs={todayRow["Actual hrs"]}
+          done={todayRow["Done?"]}
+          confidence={todayRow.Confidence}
+          notes={todayRow.Notes}
+          highlight="today"
+        />
+      ) : (
+        <p class="empty">No scheduled day matches today.</p>
+      )}
+    </article>
+
+    <article class="block">
+      <header class="block__head">
+        <h2>Next mock</h2>
+        <a href={`${import.meta.env.BASE_URL}/mocks`}>All →</a>
+      </header>
+      {nextMock ? (
+        <div class="mock-card">
+          <span class="chip">{nextMock.Type}</span>
+          <h3>{nextMock.Scope}</h3>
+          <p class="meta">{formatPretty(nextMock["Planned date"])}</p>
+          <p class="mock-card__hint">Out of {nextMock["Out of"]} marks</p>
+        </div>
+      ) : (
+        <p class="empty">No upcoming mocks scheduled.</p>
+      )}
+    </article>
+  </section>
+
+  <section class="week">
+    <header class="week__head">
+      <h2>This week</h2>
+      <a href={`${import.meta.env.BASE_URL}/daily`}>Full plan →</a>
+    </header>
+    <div class="week__rows">
+      {weekRows.map((r) => (
+        <DailyRow
+          n={r["#"]}
+          date={r.Date}
+          day={r.Day}
+          phase={r.Phase}
+          practical={r["Practical block"]}
+          theory={r["Theory block"]}
+          revisit={r["Revisit (20-30m)"]}
+          planHrs={r["Plan hrs"]}
+          actualHrs={r["Actual hrs"]}
+          done={r["Done?"]}
+          confidence={r.Confidence}
+          notes={r.Notes}
+          highlight={r.Date === today ? "today" : (r.Date < today ? "past" : "future")}
+        />
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--s-3);
+    margin-bottom: var(--s-7);
+  }
+
+  .card-pair {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--s-4);
+    margin-bottom: var(--s-7);
+  }
+  @media (max-width: 880px) {
+    .card-pair { grid-template-columns: 1fr; }
+  }
+
+  .block {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--s-5);
+  }
+  .block__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--s-4);
+  }
+  .block h2 {
+    margin: 0;
+    font-size: var(--t-h4);
+    font-weight: 500;
+  }
+  .block__head a {
+    font-size: var(--t-meta);
+    color: var(--ink-mute);
+    text-decoration: none;
+  }
+  .block__head a:hover { color: var(--ink); }
+
+  .mock-card { display: flex; flex-direction: column; gap: var(--s-2); }
+  .mock-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.3;
+  }
+  .mock-card__hint {
+    font-size: var(--t-meta);
+    color: var(--ink-mute);
+    margin: 0;
+  }
+
+  .week__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--s-4);
+  }
+  .week h2 {
+    margin: 0;
+    font-size: var(--t-h4);
+    font-weight: 500;
+  }
+  .week__head a {
+    font-size: var(--t-meta);
+    color: var(--ink-mute);
+    text-decoration: none;
+  }
+  .week__rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+
+  .empty {
+    color: var(--ink-mute);
+    font-style: italic;
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,179 @@
+---
+import Base from "../../layouts/Base.astro";
+import PdfViewer from "../../components/PdfViewer.astro";
+import { getSnapshot } from "../../lib/sheets";
+import { chapterSlug } from "../../lib/slug";
+import { formatPretty } from "../../lib/today";
+import type { Chapter } from "../../types/sheet";
+
+export async function getStaticPaths() {
+  const snap = getSnapshot("syllabus");
+  const chapters = snap.rows.filter((r) => r["Paper"]) as unknown as Chapter[];
+
+  return chapters.map((ch) => ({
+    params: { chapter: chapterSlug(ch.Paper, ch["Ch#"], ch["Chapter / Unit"]) },
+    props: { chapter: ch },
+  }));
+}
+
+interface Props {
+  chapter: Chapter;
+}
+const { chapter } = Astro.props;
+
+const paperKey = chapter.Paper.toLowerCase();
+const paperLabel: Record<string, string> = {
+  P4:  "Paper 4 · Cost & Management Accounting",
+  P5:  "Paper 5 · Auditing & Ethics",
+  P6A: "Paper 6A · Financial Management",
+  P6B: "Paper 6B · Strategic Management",
+};
+const prioLabel = chapter.Priority.replace(/^[^\w]+/, "").trim();
+const prioKey = chapter.Priority.includes("Must") ? "must" : chapter.Priority.includes("Important") ? "imp" : "low";
+const weightPct = Math.round(chapter.Weight * 100);
+
+const pdfPath = chapter["PDF URL"];
+---
+<Base
+  eyebrow={paperLabel[chapter.Paper] ?? chapter.Paper}
+  title={chapter["Chapter / Unit"]}
+  description={`Chapter ${chapter["Ch#"]} · ${chapter["Total hrs"]} planned hours · ~${weightPct}% paper weightage.`}
+>
+  <div class="head-chips">
+    <span class={`chip chip--${paperKey}`}>{chapter.Paper} · Ch {chapter["Ch#"]}</span>
+    <span class={`chip chip--${prioKey}`}>{prioLabel}</span>
+    {chapter["Done?"] && <span class="chip" style="background: var(--p6a-soft); color: var(--p6a);">✓ done</span>}
+  </div>
+
+  <section class="meta-grid">
+    <div class="meta-card">
+      <dt>Theory</dt><dd>{chapter.Theory}h</dd>
+    </div>
+    <div class="meta-card">
+      <dt>Practice</dt><dd>{chapter.Practice}h</dd>
+    </div>
+    <div class="meta-card">
+      <dt>Lecture</dt><dd>{chapter.Lecture}h</dd>
+    </div>
+    <div class="meta-card">
+      <dt>Total</dt><dd>{chapter["Total hrs"]}h</dd>
+    </div>
+    <div class="meta-card">
+      <dt>Weight</dt><dd>{weightPct}%</dd>
+    </div>
+    <div class="meta-card">
+      <dt>ICAI section</dt><dd>{chapter["ICAI Sec"]} <span class="meta-band">({chapter.Band})</span></dd>
+    </div>
+    {chapter.Start && (
+      <div class="meta-card">
+        <dt>Starts</dt><dd>{formatPretty(chapter.Start)}</dd>
+      </div>
+    )}
+    {chapter.End && (
+      <div class="meta-card">
+        <dt>Ends</dt><dd>{formatPretty(chapter.End)}</dd>
+      </div>
+    )}
+  </section>
+
+  <section class="pdf-section" id="pdf-section">
+    <h2>Reading material</h2>
+    {pdfPath ? (
+      <PdfViewer path={pdfPath} label={chapter["Chapter / Unit"]} />
+    ) : (
+      <p class="pdf-empty">
+        No PDF linked yet. Add a <code>PDF URL</code> value for this chapter in the Syllabus tab
+        (e.g. <code>pdfs/{chapter["Chapter / Unit"].toLowerCase().replace(/[^a-z0-9]+/g, "-")}.pdf</code>),
+        then drop the file into <code>public/pdfs/</code>.
+      </p>
+    )}
+  </section>
+
+  {chapter.Notes && (
+    <section class="notes">
+      <h2>Notes</h2>
+      <p>{chapter.Notes}</p>
+    </section>
+  )}
+
+  <p class="backlink"><a href={`${import.meta.env.BASE_URL}/syllabus`}>← All chapters</a></p>
+</Base>
+
+<style>
+  .head-chips {
+    display: flex;
+    gap: var(--s-2);
+    margin: calc(-1 * var(--s-4)) 0 var(--s-5);
+    flex-wrap: wrap;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--s-3);
+    margin-bottom: var(--s-7);
+  }
+  .meta-card {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    padding: var(--s-3) var(--s-4);
+  }
+  .meta-card dt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    margin-bottom: 4px;
+  }
+  .meta-card dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .meta-band {
+    font-size: 12px;
+    color: var(--ink-mute);
+    font-family: var(--font-mono);
+    font-weight: 400;
+  }
+
+  .pdf-section h2, .notes h2 {
+    font-size: var(--t-h4);
+    font-weight: 500;
+    margin: 0 0 var(--s-3);
+  }
+  .pdf-frame {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pdf-placeholder, .pdf-empty {
+    color: var(--ink-mute);
+    text-align: center;
+    padding: var(--s-6) var(--s-5);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  code { background: var(--cream-2); padding: 1px 6px; border-radius: 4px; font-family: var(--font-mono); font-size: 13px; }
+
+  .notes {
+    margin-top: var(--s-7);
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--s-5);
+  }
+
+  .backlink {
+    margin-top: var(--s-7);
+    font-size: var(--t-meta);
+  }
+</style>

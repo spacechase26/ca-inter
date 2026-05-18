@@ -1,0 +1,83 @@
+---
+import Base from "../../layouts/Base.astro";
+import ChapterCard from "../../components/ChapterCard.astro";
+import { getSnapshot } from "../../lib/sheets";
+import type { Chapter } from "../../types/sheet";
+
+const snap = getSnapshot("syllabus");
+const chapters = snap.rows.filter((r) => r["Paper"]) as unknown as Chapter[];
+
+const groups: { paper: string; label: string; chapters: Chapter[] }[] = [
+  { paper: "P4",  label: "Paper 4 · Cost & Management Accounting", chapters: [] },
+  { paper: "P5",  label: "Paper 5 · Auditing & Ethics",            chapters: [] },
+  { paper: "P6A", label: "Paper 6A · Financial Management",        chapters: [] },
+  { paper: "P6B", label: "Paper 6B · Strategic Management",        chapters: [] },
+];
+
+for (const ch of chapters) {
+  const g = groups.find((x) => x.paper === ch.Paper);
+  if (g) g.chapters.push(ch);
+}
+
+const totalHrs = chapters.reduce((acc, c) => acc + (c["Total hrs"] || 0), 0);
+const doneCount = chapters.filter((c) => c["Done?"]).length;
+---
+<Base
+  eyebrow="Syllabus · 45 chapter-units"
+  title="What you'll cover"
+  description={`Group 2 across four papers. ${totalHrs} hours of conceptual learning planned across Phase 1. ${doneCount}/${chapters.length} chapters marked complete.`}
+>
+  {groups.map((g) => (
+    <section class="group">
+      <header class="group__head">
+        <span class={`chip chip--${g.paper.toLowerCase()}`}>{g.paper}</span>
+        <h2 class="group__label">{g.label}</h2>
+        <span class="group__count">{g.chapters.length} chapters</span>
+      </header>
+      <div class="grid">
+        {g.chapters.map((ch) => (
+          <ChapterCard
+            paper={ch.Paper}
+            ch={ch["Ch#"]}
+            name={ch["Chapter / Unit"]}
+            priority={ch.Priority}
+            totalHrs={ch["Total hrs"]}
+            weight={ch.Weight}
+            done={ch["Done?"]}
+            start={ch.Start}
+            end={ch.End}
+          />
+        ))}
+      </div>
+    </section>
+  ))}
+</Base>
+
+<style>
+  .group {
+    margin-bottom: var(--s-8);
+  }
+  .group__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-3);
+    margin-bottom: var(--s-4);
+    flex-wrap: wrap;
+  }
+  .group__label {
+    font-size: var(--t-h4);
+    font-weight: 500;
+    margin: 0;
+  }
+  .group__count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
+    color: var(--ink-mute);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--s-4);
+  }
+</style>

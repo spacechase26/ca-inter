@@ -1,0 +1,172 @@
+{
+  "headers": [
+    "DAYS LEFT TO EXAM",
+    "HOURS LOGGED",
+    "HOURS PLANNED (to date)",
+    "ON-SCHEDULE"
+  ],
+  "rows": [
+    {
+      "DAYS LEFT TO EXAM": "Target: 10 Jan 2027 (tentative)",
+      "HOURS LOGGED": "Sum of YELLOW Actual-Hrs column (J)",
+      "HOURS PLANNED (to date)": "Cumulative plan up to today",
+      "ON-SCHEDULE": "Actual ÷ planned (target 100%)"
+    },
+    {
+      "DAYS LEFT TO EXAM": "CURRENT PHASE",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "📈  Per-paper progress",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Paper",
+      "HOURS LOGGED": "Chapters done",
+      "HOURS PLANNED (to date)": "% Hours done",
+      "ON-SCHEDULE": "Priority chapters left"
+    },
+    {
+      "DAYS LEFT TO EXAM": "Paper 4 · Costing",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Paper 5 · Audit & Ethics",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Paper 6A · Financial Mgmt",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Paper 6B · Strategic Mgmt",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "🧪  Mock progress",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Mocks completed",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": "Average % score",
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "🗓  Today's plan",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Practical block",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Theory block",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Revisit (spaced rep.)",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Hours planned",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "📆  This week  (next 7 days)",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Date",
+      "HOURS LOGGED": "Practical block",
+      "HOURS PLANNED (to date)": "Theory block",
+      "ON-SCHEDULE": "Plan hrs"
+    },
+    {
+      "DAYS LEFT TO EXAM": "📈  Confidence trend (7-day rolling)",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "Avg confidence (last 7 days)",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": "Avg confidence (all-time)",
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "💡  Reminders",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "1. Do Costing / FM in your sharpest hours (mornings if you're a lark, evenings if owl).",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "2. After every chapter, write a 1-page summary FROM MEMORY. That's your Phase-3 revision.",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "3. The Revisit column (col H of Daily Plan) is the spaced-repetition magic — 20-30 min daily prevents 60% forgetting.",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "4. Saturday mini-quizzes show you trending up. Confidence column rates your feel each day.",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "5. Rate Confidence 1-10 every day — if 3 days in a row are < 4, that's the burnout signal. Take an unplanned rest day.",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "6. Re-do every wrong mock answer THE SAME DAY. Tomorrow is too late.",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    },
+    {
+      "DAYS LEFT TO EXAM": "7. 7.5–8 hrs sleep is non-negotiable. Sacrifice study time, not sleep.",
+      "HOURS LOGGED": null,
+      "HOURS PLANNED (to date)": null,
+      "ON-SCHEDULE": null
+    }
+  ]
+}

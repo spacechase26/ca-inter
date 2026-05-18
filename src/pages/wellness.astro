@@ -1,0 +1,64 @@
+---
+import Base from "../layouts/Base.astro";
+import wellnessData from "../data/snapshots/wellness.json";
+
+interface Section { title: string; items: string[]; }
+const sections = (wellnessData as { sections: Section[] }).sections;
+---
+<Base
+  eyebrow="Wellness · the load-bearing parts"
+  title="Body and mind protocol"
+  description="Burn-out is the #1 reason CA students fail. Treat your body and brain like they're on the exam too — because they are."
+>
+  <div class="wellness">
+    {sections.map((s) => (
+      <section class="ws">
+        <h2 class="ws__title">{s.title}</h2>
+        <ul class="ws__list">
+          {s.items.map((it) => <li>{it}</li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .wellness {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--s-4);
+  }
+  .ws {
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: var(--s-5);
+  }
+  .ws__title {
+    font-size: var(--t-h4);
+    font-weight: 500;
+    margin: 0 0 var(--s-3);
+  }
+  .ws__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+  }
+  .ws__list li {
+    font-size: 14px;
+    line-height: 1.5;
+    padding-left: var(--s-4);
+    position: relative;
+  }
+  .ws__list li::before {
+    content: "·";
+    position: absolute;
+    left: 0;
+    top: -2px;
+    color: var(--ink-mute);
+    font-weight: 700;
+  }
+</style>
