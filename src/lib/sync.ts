@@ -23,6 +23,12 @@ function lsGet(key: string): number {
   }
 }
 
+/** Synchronous read of the local last-page value. Use to render page 1 fast,
+ *  then reconcile with the remote via getLastPage() after first paint. */
+export function getLastPageLocal(key: string): number {
+  return lsGet(key);
+}
+
 function lsSet(key: string, page: number): void {
   try {
     localStorage.setItem(LS_PREFIX + key, String(page));
