@@ -3,12 +3,19 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Rebuild every day so the build-time "today" advances. 18:30 UTC = 00:00 IST.
+  schedule:
+    - cron: "30 18 * * *"
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+# Build in India time so todayIso() (new Date() at build time) bakes the correct local date.
+env:
+  TZ: Asia/Kolkata
 
 concurrency:
   group: "pages"
