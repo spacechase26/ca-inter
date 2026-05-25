@@ -18,6 +18,7 @@
  */
 import { csvUrl } from "./sheets";
 import { parseSheetCsv } from "./parse";
+import { formatPretty } from "./today";
 import { cacheGet, cacheSet } from "./cache";
 import type { SheetData, TabKey } from "../types/sheet";
 
@@ -145,6 +146,67 @@ function patchChaptersTotals(rows: Row[]): void {
   if (sylDone) sylDone.textContent = String(done);
 }
 
+// ---- mocks tab -----------------------------------------------------------
+
+function mockIsDone(row: Row): boolean {
+  const marks = row["Marks scored"];
+  return !!row["Done date"] && marks !== null && marks !== undefined && marks !== "";
+}
+
+function patchMocks(rows: Row[]): void {
+  const byN = byNumber(rows);
+  document.querySelectorAll<HTMLElement>(".mock[data-mock]").forEach((el) => {
+    const row = byN.get(Number(el.dataset.mock));
+    if (!row) return;
+
+    if (mockIsDone(row)) {
+      const outOf = Number(row["Out of"]);
+      const pct = outOf ? Math.round((Number(row["Marks scored"]) / outOf) * 100) : 0;
+      el.classList.remove("mock--upcoming", "mock--missed");
+      el.classList.add("mock--done");
+      const status = el.querySelector<HTMLElement>('[data-field="status"]');
+      if (status) {
+        status.textContent = `✓ ${pct}%`;
+        status.className = "mock__status mock__status--done";
+      }
+      const detail = el.querySelector<HTMLElement>('[data-field="detail"]');
+      if (detail) {
+        detail.hidden = false;
+        detail.textContent = `Scored ${row["Marks scored"]} / ${row["Out of"]} on ${formatPretty(String(row["Done date"]))}`;
+      }
+    }
+
+    const weakEl = el.querySelector<HTMLElement>('[data-field="weak"]');
+    if (weakEl) {
+      const weak = row["Weak areas to revisit"];
+      const has = weak !== null && weak !== undefined && weak !== "";
+      weakEl.hidden = !has;
+      if (has) {
+        const target = weakEl.querySelector<HTMLElement>("[data-field-value]") ?? weakEl;
+        target.textContent = String(weak);
+      }
+    }
+  });
+}
+
+function patchMocksSummary(rows: Row[]): void {
+  const summary = document.querySelector<HTMLElement>("[data-mock-summary]");
+  if (!summary) return;
+  const done = rows.filter((r) => r["#"] && mockIsDone(r));
+  const count = done.length;
+  const avg = count
+    ? Math.round((done.reduce((a, m) => a + (Number(m["Marks scored"]) / Number(m["Out of"])) * 100, 0) / count) * 10) / 10
+    : null;
+  summary.hidden = avg === null;
+  if (avg === null) return;
+  const avgEl = summary.querySelector<HTMLElement>("[data-mock-avg]");
+  const cEl = summary.querySelector<HTMLElement>("[data-mock-count]");
+  const nEl = summary.querySelector<HTMLElement>("[data-mock-noun]");
+  if (avgEl) avgEl.textContent = `${avg}%`;
+  if (cEl) cEl.textContent = String(count);
+  if (nEl) nEl.textContent = count === 1 ? "mock" : "mocks";
+}
+
 // ---- orchestration -------------------------------------------------------
 
 let inFlight = false;
@@ -176,6 +238,16 @@ async function refresh(force: boolean): Promise<void> {
           if (!d) return;
           patchChapters(d.rows);
           patchChaptersTotals(d.rows);
+        }),
+      );
+    }
+
+    if (document.querySelector(".mock[data-mock]")) {
+      tasks.push(
+        loadTab("mocks", force).then((d) => {
+          if (!d) return;
+          patchMocks(d.rows);
+          patchMocksSummary(d.rows);
         }),
       );
     }

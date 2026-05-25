@@ -20,9 +20,7 @@ const avgPct = done.length
   title="Practice exams"
   description="6 sectional + 4 full + 2 ICAI MTPs. Score progression below — target 60%+ aggregate by Mock 10."
 >
-  {avgPct !== null && (
-    <p class="summary">Average score so far: <strong>{avgPct}%</strong> across {done.length} mock{done.length === 1 ? "" : "s"}.</p>
-  )}
+  <p class="summary" data-mock-summary hidden={avgPct === null}>Average score so far: <strong data-mock-avg>{avgPct ?? 0}%</strong> across <span data-mock-count>{done.length}</span> <span data-mock-noun>{done.length === 1 ? "mock" : "mocks"}</span>.</p>
 
   <ol class="mocks">
     {mocks.map((m) => {
@@ -31,26 +29,22 @@ const avgPct = done.length
       const pct = isDone ? Math.round((Number(m["Marks scored"]) / Number(m["Out of"])) * 100) : null;
       const status = isDone ? "done" : isPast ? "missed" : "upcoming";
       return (
-        <li class={`mock mock--${status}`}>
+        <li class={`mock mock--${status}`} data-mock={m["#"]}>
           <div class="mock__head">
             <span class="mock__n">#{m["#"]}</span>
             <span class="chip mock__type">{m.Type}</span>
             <time class="mock__date" datetime={String(m["Planned date"])}>
               {formatPretty(String(m["Planned date"]))}
             </time>
-            <span class={`mock__status mock__status--${status}`}>
+            <span class={`mock__status mock__status--${status}`} data-field="status">
               {status === "done" ? `✓ ${pct}%` : status === "missed" ? "missed" : "upcoming"}
             </span>
           </div>
           <p class="mock__scope">{m.Scope}</p>
-          {isDone && (
-            <p class="mock__detail">
-              Scored {m["Marks scored"]} / {m["Out of"]} on {formatPretty(String(m["Done date"]))}
-            </p>
-          )}
-          {m["Weak areas to revisit"] && (
-            <p class="mock__weak">⚠ Weak: {m["Weak areas to revisit"]}</p>
-          )}
+          <p class="mock__detail" data-field="detail" hidden={!isDone}>
+            {isDone ? `Scored ${m["Marks scored"]} / ${m["Out of"]} on ${formatPretty(String(m["Done date"]))}` : ""}
+          </p>
+          <p class="mock__weak" data-field="weak" hidden={!m["Weak areas to revisit"]}>⚠ Weak: <span data-field-value>{m["Weak areas to revisit"] ?? ""}</span></p>
         </li>
       );
     })}
