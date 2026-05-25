@@ -148,5 +148,16 @@ const base = import.meta.env.BASE_URL;
         .nav { width: 100%; justify-content: flex-start; }
       }
     </style>
+
+    <script>
+      // Live-refresh: load the module (and papaparse) only on pages that show
+      // Sheet-backed data, then it self-wires and also handles the Refresh button.
+      if (
+        document.querySelector(".daily[data-n]") ||
+        document.querySelector('.kpi[data-kpi="plan-hours"]')
+      ) {
+        import("../lib/live").then((m) => m.initLive());
+      }
+    </script>
   </body>
 </html>

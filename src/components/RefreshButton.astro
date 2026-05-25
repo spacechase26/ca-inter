@@ -7,22 +7,14 @@
 </button>
 
 <script>
-  const CACHE_PREFIX = "ca-inter:cache:";
+  // Ask the live-refresh module (loaded on data pages) to re-pull the Sheet
+  // in place. Harmless no-op on pages that have no live data.
   const btn = document.getElementById("refresh-btn");
   if (btn) {
     btn.addEventListener("click", () => {
-      try {
-        const toRemove: string[] = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const k = localStorage.key(i);
-          if (k && k.startsWith(CACHE_PREFIX)) toRemove.push(k);
-        }
-        toRemove.forEach((k) => localStorage.removeItem(k));
-      } catch {
-        /* ignore */
-      }
       btn.classList.add("refresh--spin");
-      setTimeout(() => location.reload(), 250);
+      window.dispatchEvent(new Event("ca:refresh"));
+      window.setTimeout(() => btn.classList.remove("refresh--spin"), 700);
     });
   }
 </script>

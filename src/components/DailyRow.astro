@@ -22,12 +22,12 @@ const phaseClass = `daily--${phase.toLowerCase()}`;
 const stateClass = highlight ? `daily--${highlight}` : "";
 const pretty = formatPretty(date);
 ---
-<article class={`daily ${phaseClass} ${stateClass} ${done ? "daily--done" : ""}`} data-date={date} id={`d-${date}`}>
+<article class={`daily ${phaseClass} ${stateClass} ${done ? "daily--done" : ""}`} data-date={date} data-n={n} id={`d-${date}`}>
   <header class="daily__head">
     <span class="daily__n">Day {n}</span>
     <time class="daily__date" datetime={date}>{pretty}</time>
     <span class={`chip daily__phase`}>{phase}</span>
-    {done && <span class="daily__done">✓ done</span>}
+    <span class="daily__done" data-field="done" hidden={!done}>✓ done</span>
   </header>
   <div class="daily__body">
     {practical && (
@@ -54,19 +54,15 @@ const pretty = formatPretty(date);
       <span class="daily__metric-label">Plan</span>
       <span class="daily__metric-value">{planHrs}h</span>
     </span>
-    {actualHrs != null && (
-      <span class="daily__metric">
-        <span class="daily__metric-label">Actual</span>
-        <span class="daily__metric-value">{actualHrs}h</span>
-      </span>
-    )}
-    {confidence != null && (
-      <span class="daily__metric">
-        <span class="daily__metric-label">Conf.</span>
-        <span class="daily__metric-value">{confidence}/5</span>
-      </span>
-    )}
-    {notes && <span class="daily__note">📝 {notes}</span>}
+    <span class="daily__metric" data-field="actual" hidden={actualHrs == null}>
+      <span class="daily__metric-label">Actual</span>
+      <span class="daily__metric-value" data-field-value>{actualHrs != null ? `${actualHrs}h` : ""}</span>
+    </span>
+    <span class="daily__metric" data-field="confidence" hidden={confidence == null}>
+      <span class="daily__metric-label">Conf.</span>
+      <span class="daily__metric-value" data-field-value>{confidence != null ? `${confidence}/5` : ""}</span>
+    </span>
+    <span class="daily__note" data-field="notes" hidden={!notes}>📝 <span data-field-value>{notes ?? ""}</span></span>
   </footer>
 </article>
 
@@ -173,4 +169,7 @@ const pretty = formatPretty(date);
     color: var(--ink-2);
     margin-left: auto;
   }
+
+  /* Slots the live-refresh script toggles — must beat .daily__metric's inline-flex */
+  .daily [hidden] { display: none !important; }
 </style>
