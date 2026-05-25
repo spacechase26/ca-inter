@@ -87,7 +87,7 @@ const nextMock = upcomingMocks[0];
   <section class="kpis">
     <KpiCard label="Days in plan" value={daysTotal} hint={`${daysElapsed} elapsed · ${daysRemaining} to go`} />
     <KpiCard label="Plan hours" value={totalPlanHrs} suffix="h" hint={`Actual logged: ${Math.round(totalActualHrs)}h`} dataKey="plan-hours" />
-    <KpiCard label="Chapters done" value={`${completionPct}%`} hint={`${chapters.filter((c) => c["Done?"]).length} / ${chapters.length}`} />
+    <KpiCard label="Chapters done" value={`${completionPct}%`} hint={`${chapters.filter((c) => c["Done?"]).length} / ${chapters.length}`} dataKey="chapters-done" />
     <KpiCard
       label="Current phase"
       value={currentPhase?.Phase?.split("·")[0]?.trim() ?? "—"}

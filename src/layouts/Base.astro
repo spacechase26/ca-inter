@@ -154,7 +154,9 @@ const base = import.meta.env.BASE_URL;
       // Sheet-backed data, then it self-wires and also handles the Refresh button.
       if (
         document.querySelector(".daily[data-n]") ||
-        document.querySelector('.kpi[data-kpi="plan-hours"]')
+        document.querySelector("[data-ch]") ||
+        document.querySelector('.kpi[data-kpi="plan-hours"]') ||
+        document.querySelector('.kpi[data-kpi="chapters-done"]')
       ) {
         import("../lib/live").then((m) => m.initLive());
       }

@@ -25,8 +25,9 @@ const doneCount = chapters.filter((c) => c["Done?"]).length;
 <Base
   eyebrow="Syllabus · 45 chapter-units"
   title="What you'll cover"
-  description={`Group 2 across four papers. ${totalHrs} hours of conceptual learning planned across Phase 1. ${doneCount}/${chapters.length} chapters marked complete.`}
+  description={`Group 2 across four papers. ${totalHrs} hours of conceptual learning planned across Phase 1.`}
 >
+  <p class="syl-progress"><span data-syl-done>{doneCount}</span> / {chapters.length} chapters marked complete</p>
   {groups.map((g) => (
     <section class="group">
       <header class="group__head">
@@ -37,6 +38,7 @@ const doneCount = chapters.filter((c) => c["Done?"]).length;
       <div class="grid">
         {g.chapters.map((ch) => (
           <ChapterCard
+            n={ch["#"]}
             paper={ch.Paper}
             ch={ch["Ch#"]}
             name={ch["Chapter / Unit"]}
@@ -54,6 +56,12 @@ const doneCount = chapters.filter((c) => c["Done?"]).length;
 </Base>
 
 <style>
+  .syl-progress {
+    font-family: var(--font-mono);
+    font-size: var(--t-meta);
+    color: var(--ink-mute);
+    margin: 0 0 var(--s-6);
+  }
   .group {
     margin-bottom: var(--s-8);
   }
